@@ -170,25 +170,29 @@ Class Master extends DBConnection {
 	function save_absensi(){
 		extract($_POST);
 		
-
+		$id = $_POST['absensi_id'];
 		$bulan = $_POST['bulan'];
 		$id_karyawan = $_POST['text_id_karyawan'];
 		$hadir = $_POST['hadir'];
 		$absen = $_POST['absen'];
 		$lembur = $_POST['lembur'];
 		$izin = $_POST['izin'];
+
 		$check = $this->conn->query("SELECT * from absensi WHERE id_karyawan = '$id_karyawan' and bulan = '$bulan'")->num_rows;
 		
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Data absensi karyawan sudah ada.";
+			$resp['msg'] = "Data absensi pada bulan ini sudah ada.";
 			return json_encode($resp);
 			exit;
 		}
 		if(empty($id)){
 			$sql = "INSERT INTO `absensi` set id_karyawan = '$id_karyawan' , bulan = '$bulan' , hadir = '$hadir' , absen = '$absen' , lembur = '$lembur' , izin = '$izin'";
+			$save = $this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `absensi` set id_karyawan = '$id_karyawan' , bulan = '$bulan' , hadir = '$hadir' , absen = '$absen' , lembur = '$lembur' , izin = '$izin' where id = '{$id}' ";
 			$save = $this->conn->query($sql);
 		
 		}
@@ -197,7 +201,7 @@ Class Master extends DBConnection {
 			if(empty($id))
 				$this->settings->set_flashdata('success',"Data absensi karyawan berhasil disimpan.");
 			else
-				$this->settings->set_flashdata('success',"Data absensi karyawana berhasil diperbarui.");
+				$this->settings->set_flashdata('success',"Data absensi karyawan berhasil diperbarui.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";

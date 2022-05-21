@@ -2,7 +2,7 @@
 	<div class="card-header">
 		<h3 class="card-title">Daftar Absensi Karyawan</h3>
 		<div class="card-tools">
-			<a href="<?php echo base_url ?>admin/?page=absensi/manage_absensi" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Absensi</a>
+		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Absensi</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -40,7 +40,34 @@
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
                             <td><?php echo $row['id_karyawan'] ?></td>	
                             <td><?php echo $row['nama'] ?></td>                            
-                            <td><?php echo $row['bulan'] ?></td>
+                            <td>
+								<?php if($row['bulan'] == 1): ?>
+                                    <span>Januari</span>
+                                <?php elseif($row['bulan'] == 2): ?>
+                                    <span>Februari</span>
+									<?php elseif($row['bulan'] == 3): ?>
+                                    <span>Maret</span>
+									<?php elseif($row['bulan'] == 4): ?>
+                                    <span>April</span>
+									<?php elseif($row['bulan'] == 5): ?>
+                                    <span>Mei</span>
+									<?php elseif($row['bulan'] == 6): ?>
+                                    <span>Juni</span>
+									<?php elseif($row['bulan'] == 7): ?>
+                                    <span>Juli</span>
+									<?php elseif($row['bulan'] == 8): ?>
+                                    <span>Agustus</span>
+									<?php elseif($row['bulan'] == 9): ?>
+                                    <span>September</span>
+									<?php elseif($row['bulan'] == 10): ?>
+                                    <span>Oktober</span>
+									<?php elseif($row['bulan'] == 11): ?>
+                                    <span>November</span>
+                                <?php else :?>
+                                    <span>Desember</span>
+                                <?php endif; ?>
+								
+							</td>
 							<td><?php echo $row['hadir'] ?> Hari</td>
 							<td><?php echo $row['absen'] ?> Hari</td>
 							<td><?php echo $row['lembur'] ?> Hari</td>
