@@ -16,6 +16,33 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`salon` /*!40100 DEFAULT CHARACTER SET l
 
 USE `salon`;
 
+/*Table structure for table `absensi` */
+
+DROP TABLE IF EXISTS `absensi`;
+
+CREATE TABLE `absensi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_karyawan` int(11) DEFAULT NULL,
+  `bulan` varchar(50) DEFAULT NULL,
+  `hadir` int(11) DEFAULT NULL,
+  `absen` int(11) DEFAULT NULL,
+  `lembur` int(11) DEFAULT NULL,
+  `izin` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `absensi_ibfk_1` (`id_karyawan`),
+  CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+
+/*Data for the table `absensi` */
+
+insert  into `absensi`(`id`,`id_karyawan`,`bulan`,`hadir`,`absen`,`lembur`,`izin`) values 
+(6,7,'1',20,6,0,0),
+(7,7,'2',20,6,0,0),
+(8,8,'1',1,1,1,1),
+(9,7,'3',1,1,1,1),
+(10,8,'4',1,1,1,1),
+(11,7,'10',4,3,6,1);
+
 /*Table structure for table `admin` */
 
 DROP TABLE IF EXISTS `admin`;
@@ -141,12 +168,13 @@ CREATE TABLE `karyawan` (
   `gajipokok` int(11) DEFAULT NULL,
   `tanggalmasuk` date DEFAULT NULL,
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `karyawan` */
 
 insert  into `karyawan`(`id`,`nama`,`alamat`,`nohp`,`jabatan`,`gajipokok`,`tanggalmasuk`) values 
-(7,'Karyawan','Riau','08110239232',2,2000000,'2022-05-19');
+(7,'Karyawan','Riau','08110239232',2,2000000,'2022-05-19'),
+(8,'Hevalo','Pekanbaru','123123132',2,2000000,'2022-05-19');
 
 /*Table structure for table `po_items` */
 
