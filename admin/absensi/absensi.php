@@ -1,6 +1,6 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Daftar Absensi Karyawann</h3>
+		<h3 class="card-title">Daftar Absensi Karyawan</h3>
 		<div class="card-tools">
 			<a href="<?php echo base_url ?>admin/?page=absensi/manage_absensi" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Absensi</a>
 		</div>
