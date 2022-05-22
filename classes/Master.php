@@ -61,19 +61,20 @@ Class Master extends DBConnection {
 	// 	return json_encode($resp);
 	// }
 	
-	function delete_supplier(){
-		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `supplier_list` where id = '{$id}'");
-		if($del){
-			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Supplier successfully deleted.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['error'] = $this->conn->error;
-		}
-		return json_encode($resp);
+	// function delete_supplier(){
+	// 	extract($_POST);
+	// 	$del = $this->conn->query("DELETE FROM `supplier_list` where id = '{$id}'");
+	// 	if($del){
+	// 		$resp['status'] = 'success';
+	// 		$this->settings->set_flashdata('success',"Supplier successfully deleted.");
+	// 	}else{
+	// 		$resp['status'] = 'failed';
+	// 		$resp['error'] = $this->conn->error;
+	// 	}
+	// 	return json_encode($resp);
 
-	}
+	// }
+
 	// function save_item(){
 	// 	extract($_POST);
 	// 	$data = "";
@@ -222,6 +223,64 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 
 	}
+
+
+	function save_tunjangan(){
+		extract($_POST);
+		
+		$id = $_POST['id_tunjangan'];		
+		$id_karyawan = $_POST['text_id_karyawan'];
+		$t_kesehatan = $_POST['t_kesehatan'];
+		$t_makan = $_POST['t_makan'];
+		$t_transport = $_POST['t_transport'];
+		$t_kasir = $_POST['t_kasir'];
+		$t_kerajinan = $_POST['t_kerajinan'];
+
+		$check = $this->conn->query("SELECT * from tunjangan WHERE id_tunjangan = '$id' and id_karyawan = '$id_karyawan'")->num_rows;
+		
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Data tunjangan sudah ada.";
+			return json_encode($resp);
+			exit;
+		}
+		if(empty($id)){
+			$sql = "INSERT INTO `tunjangan` set id_tunjangan ='$id', id_karyawan = '$id_karyawan' , kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan'";
+			$save = $this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `tunjangan` set id_tunjangan ='$id', id_karyawan = '$id_karyawan' , kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan' where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data tunjangan karyawan berhasil disimpan.");
+			else
+				$this->settings->set_flashdata('success',"Data tunjangan karyawan berhasil diperbarui.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function delete_tunjangan(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `tunjangan` where id_tunjangan = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Data tunjangan karyawan berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+
 
 	function save_po(){
 		if(empty($_POST['id'])){

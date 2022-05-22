@@ -1,8 +1,8 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Daftar Absensi Karyawan</h3>
+		<h3 class="card-title">Tunjangan Karyawan</h3>
 		<div class="card-tools">
-		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Absensi</a>
+		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Tunjangan</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -10,8 +10,8 @@
         <div class="container-fluid">
 			<table class="table table-hovered table-striped">
 				<colgroup>
+					<col width="15%">
 					<col width="5%">
-					<col width="20%">
 					<col width="20%">
 					<col width="13%">
 					<col width="13%">
@@ -20,58 +20,33 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>ID</th>						
+						<th>ID Tunjangan</th>	
+						<th>ID Karyawan</th>					
 						<th>Nama</th>						
-						<th>Bulan</th>
-                        <th>Hadir</th>                        
-                        <th>Absen</th>
-						<th>Lembur</th>
-						<th>Izin</th>
+						<th>Tunjangan Kesehatan</th>
+                        <th>Tunjangan Makan</th>                        
+                        <th>Tunjangan Transport</th>
+						<th>Tunjangan Kasir</th>
+						<th>Tunjangan Kerajinan</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT absensi.id,id_karyawan,nama,bulan,hadir,absen,lembur,izin FROM karyawan JOIN absensi ON karyawan.id=absensi.id_karyawan order by id_karyawan asc ");
+						$qry = $conn->query("SELECT id_tunjangan,id_karyawan,nama,t_kesehatan,t_makan,t_transport,t_kasir,t_kerajinan FROM tunjangan JOIN karyawan ON karyawan.id = tunjangan.id_karyawan order by id_karyawan asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
+							<td><?php echo $row['id_tunjangan'] ?></td>
                             <td><?php echo $row['id_karyawan'] ?></td>	
                             <td><?php echo $row['nama'] ?></td>                            
-                            <td>
-								<?php if($row['bulan'] == 1): ?>
-                                    <span>Januari</span>
-                                <?php elseif($row['bulan'] == 2): ?>
-                                    <span>Februari</span>
-									<?php elseif($row['bulan'] == 3): ?>
-                                    <span>Maret</span>
-									<?php elseif($row['bulan'] == 4): ?>
-                                    <span>April</span>
-									<?php elseif($row['bulan'] == 5): ?>
-                                    <span>Mei</span>
-									<?php elseif($row['bulan'] == 6): ?>
-                                    <span>Juni</span>
-									<?php elseif($row['bulan'] == 7): ?>
-                                    <span>Juli</span>
-									<?php elseif($row['bulan'] == 8): ?>
-                                    <span>Agustus</span>
-									<?php elseif($row['bulan'] == 9): ?>
-                                    <span>September</span>
-									<?php elseif($row['bulan'] == 10): ?>
-                                    <span>Oktober</span>
-									<?php elseif($row['bulan'] == 11): ?>
-                                    <span>November</span>
-                                <?php else :?>
-                                    <span>Desember</span>
-                                <?php endif; ?>
-								
-							</td>
-							<td><?php echo $row['hadir'] ?> Hari</td>
-							<td><?php echo $row['absen'] ?> Hari</td>
-							<td><?php echo $row['lembur'] ?> Hari</td>
-							<td><?php echo $row['izin'] ?> Hari</td>	
+                            <td><?php echo $row['t_kesehatan'] ?></td>
+							<td><?php echo $row['t_makan'] ?></td>
+							<td><?php echo $row['t_transport'] ?></td>
+							<td><?php echo $row['t_kasir'] ?></td>
+							<td><?php echo $row['t_kerajinan'] ?></td>
                                                      	
 																				
 							
@@ -83,9 +58,9 @@
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">				                   
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['id_tunjangan'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id_tunjangan'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
 							</td>
 						</tr>
@@ -99,24 +74,24 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Yakin ingin menghapus data absensi karyawan ini?","delete_category",[$(this).attr('data-id')])
+			_conf("Yakin ingin menghapus data tunjangan karyawan ini?","delete_category",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Tambah Data Absensi Karyawan","absensi/manage_absensi.php","mid-large")
+			uni_modal("<i class='fa fa-plus'></i> Tambah data tunjangan karyawan","tunjangan/manage_tunjangan.php","mid-large")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Data Absensi Karyawan","absensi/manage_absensi.php?id="+$(this).attr('data-id'),"mid-large")
+			uni_modal("<i class='fa fa-edit'></i> Edit data tunjangan karyawan","tunjangan/manage_tunjangan.php?id="+$(this).attr('data-id'),"mid-large")
 		})
-		// $('.view_data').click(function(){
-		// 	uni_modal("<i class='fa fa-box'></i> Detail Data Karyawan","karyawan/view_karyawan.php?id="+$(this).attr('data-id'),"")
-		// })
+		$('.view_data').click(function(){
+			uni_modal("<i class='fa fa-box'></i> Detail tunjangan Karyawan","tunjangan/view_tunjangan.php?id="+$(this).attr('data-id'),"")
+		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();
 	})
 	function delete_category($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_absensi",
+			url:_base_url_+"classes/Master.php?f=delete_tunjangan",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

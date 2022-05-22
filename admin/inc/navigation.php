@@ -82,13 +82,21 @@
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=absensi/absensi" class="nav-link nav-stocks">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="nav-icon fas fa-calendar-alt"></i>
                         <p>
                           Absensi Karyawan
                         </p>
                       </a>
                     </li>
 
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=tunjangan/tunjangan" class="nav-link nav-stocks">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>
+                          Tunjangan
+                        </p>
+                      </a>
+                    </li>
                     <!-- <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
