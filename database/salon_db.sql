@@ -345,6 +345,28 @@ insert  into `system_info`(`id`,`meta_field`,`meta_value`) values
 (14,'cover','uploads/cover-1652865745.png'),
 (15,'content','Array');
 
+/*Table structure for table `tunjangan` */
+
+DROP TABLE IF EXISTS `tunjangan`;
+
+CREATE TABLE `tunjangan` (
+  `id_tunjangan` varchar(50) NOT NULL,
+  `id_karyawan` int(11) DEFAULT NULL,
+  `t_kesehatan` int(11) DEFAULT NULL,
+  `t_makan` int(11) DEFAULT NULL,
+  `t_transport` int(11) DEFAULT NULL,
+  `t_kasir` int(11) DEFAULT NULL,
+  `t_kerajinan` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_tunjangan`),
+  KEY `id_karyawan` (`id_karyawan`),
+  CONSTRAINT `tunjangan_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tunjangan` */
+
+insert  into `tunjangan`(`id_tunjangan`,`id_karyawan`,`t_kesehatan`,`t_makan`,`t_transport`,`t_kasir`,`t_kerajinan`) values 
+('TUN001',8,1,1,1,1,1);
+
 /*Table structure for table `user_meta` */
 
 DROP TABLE IF EXISTS `user_meta`;
