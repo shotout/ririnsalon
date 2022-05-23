@@ -1,8 +1,7 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $tunjangan_id = $_GET['id'];
-    $qry = $conn->query("SELECT id_tunjangan,id_karyawan,nama,t_kesehatan,t_makan,t_transport,t_kasir,t_kerajinan FROM tunjangan JOIN karyawan ON karyawan.id = tunjangan.id_karyawan WHERE id_tunjangan = '$tunjangan_id'");
+    $qry = $conn->query("SELECT id_tunjangan,id_karyawan,nama,t_kesehatan,t_makan,t_makeup,t_transport,t_kasir,t_kerajinan FROM tunjangan JOIN karyawan ON karyawan.id = tunjangan.id_karyawan WHERE id_tunjangan = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -27,25 +26,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 </style>
 <div class="card card-outline card-primary">
-    <div class="card-header">Tunjangan</h4>
+    <div class="card-header"></h4>
     </div>
     
     <div class="card-body">
         <form action="" id="tunjangan-form"> 
-        <input type="text" name ="id" value="<?php echo isset($tunjangan_id) ? $tunjangan_id : '' ?>">
-            
-             <!-- <?php
-                            $qry = $conn->query("SELECT max(id_tunjangan) as kodeTerbesar FROM tunjangan");
-                            $data = mysqli_fetch_array($qry);
-                            $kode_tunjangan = $data['kodeTerbesar'];
-                            $urutan = (int) substr($kode_tunjangan, 3, 3);
-                            $urutan++;
-                            $huruf = "TUN";
-                            $kode_tunjangan = $huruf . sprintf("%03s", $urutan);
-                            
-                            ?>                            
-        <h4 class="card-title" id = "id_tunjangan" name = "id_tunjangan" value="<?php echo $kode_tunjangan ?>"><?php echo $kode_tunjangan?> -->
-            
+        <input type="hidden" name ="id" value="<?php echo isset($id_tunjangan) ? $id_tunjangan : '' ?>">            
+                        
             <div class="container-fluid">
             
                 <div class="row">
@@ -61,7 +48,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     <div class="col-md-6">
                         <div class="form-group">                          
                             
-
                             <label for="karyawan" class="control-label text-info">Karyawan</label>
                             <select name="nama_karyawan" id="nama_karyawan" class="custom-select select2">
                                                         
@@ -89,20 +75,28 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="t_kesehatan"  class="control-label">Kesehatan</label>
-                                <input type="number"  class="form-control rounded-0" id="t_kesehatan" name ="t_kesehatan" value="<?php echo isset($t_kesehatan) ? $t_kesehatan : ''; ?>">
+                                <input type="number"  class="form-control rounded-0" id = "t_kesehatan" name = "t_kesehatan" value="<?php echo isset($t_kesehatan) ? $t_kesehatan : ''; ?>">
                             </div>
                         </div>       
                     
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="t_makan"  class="control-label">Makan</label>
-                                <input type="number"  class="form-control rounded-0" id="t_makan" name ="t_makan" value="<?php echo isset($t_makan) ? $t_makan : ''; ?>">
+                                <input type="number"  class="form-control rounded-0" id = "t_makan" name = "t_makan" value="<?php echo isset($t_makan) ? $t_makan : ''; ?>">
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="t_makeup"  class="control-label">Make Up</label>
+                                <input type="number"  class="form-control rounded-0" id = "t_makeup" name = "t_makeup" value="<?php echo isset($t_makeup) ? $t_makeup : ''; ?>">
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="t_transport"  class="control-label">Transport</label>
-                                <input type="number"  class="form-control rounded-0" id="t_transport" name="t_transport" value="<?php echo isset($t_transport) ? $t_transport : ''; ?>">
+                                <input type="number"  class="form-control rounded-0" id = "t_transport" name = "t_transport" value="<?php echo isset($t_transport) ? $t_transport : ''; ?>">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -187,14 +181,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			})
 		})
 
-    //     if('<?php echo isset($id) && $id > 0 ?>' == 1){
-    //         calc()
-    //         $('#supplier_id').trigger('change')
-    //         $('#supplier_id').attr('readonly','readonly')
-    //         $('table#list tbody tr .rem_row').click(function(){
-    //             rem($(this))
-    //         })
-    //     }
+        if('<?php echo isset($id_tunjangan) && $id_tunjangan > 0 ?>' == 1){
+            
+            $('#nama_karyawan').trigger('change')
+            $('#nama_karyawan').attr('readonly','readonly')
+            
+        }
     // })
     // function rem(_this){
     //     _this.closest('tr').remove()

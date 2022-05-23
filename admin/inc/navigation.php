@@ -97,14 +97,15 @@
                         </p>
                       </a>
                     </li>
-                    <!-- <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=sales" class="nav-link nav-sales">
+
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=penggajian/penggajian" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p>
-                          Sale List
+                          Penggajian
                         </p>
                       </a>
-                    </li> -->
+                    </li>
 
                     <!-- <?php if($_settings->userdata('type') == 1): ?> -->
                     <li class="nav-header">Maintenance</li>

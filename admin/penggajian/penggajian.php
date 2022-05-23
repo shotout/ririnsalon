@@ -1,8 +1,8 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Tunjangan Karyawan</h3>
+		<h3 class="card-title">Penggajian Karyawan</h3>
 		<div class="card-tools">
-		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Tunjangan</a>
+		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Penggajian</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -13,40 +13,33 @@
 					<col width="20%">
 					<col width="13%">
 					<col width="13%">
-					<col width="13%">
-					<col width="13%">
-					<col width="13%">
-					<col width="13%">
+					<col width="5%">
 				</colgroup>
 				<thead>
 					<tr>
 											
 						<th>Nama</th>						
-						<th>Tunjangan Kesehatan</th>
-                        <th>Tunjangan Makan</th>
-						<th>Tunjangan Make Up</th>                        
-                        <th>Tunjangan Transport</th>
-						<th>Tunjangan Kasir</th>
-						<th>Tunjangan Kerajinan</th>
+						<th>Bulan</th>
+                        <th>Total</th>						
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT id_tunjangan,id_karyawan,nama,t_kesehatan,t_makan,t_makeup,t_transport,t_kasir,t_kerajinan FROM tunjangan JOIN karyawan ON karyawan.id = tunjangan.id_karyawan order by id_karyawan asc ");
+						$qry = $conn->query("SELECT id_penggajian,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian 
+						JOIN karyawan ON penggajian.id_karyawan = karyawan.id 
+						JOIN absensi ON penggajian.id_absensi = absensi.id
+						JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan order by id_penggajian asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
 								
                             <td><?php echo $row['nama'] ?></td>                            
-                            <td><?php echo $row['t_kesehatan'] ?></td>
-							<td><?php echo $row['t_makan'] ?></td>
-							<td><?php echo $row['t_makeup'] ?></td>
-							<td><?php echo $row['t_transport'] ?></td>
-							<td><?php echo $row['t_kasir'] ?></td>
-							<td><?php echo $row['t_kerajinan'] ?></td>
+                            <td><?php echo $row['bulan'] ?></td>							
+							<td><?php echo $row['total'] ?></td>
+							
                                                      	
 																				
 							
@@ -81,7 +74,7 @@
 			_conf("Yakin ingin menghapus data tunjangan karyawan ini?","delete_category",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Tambah data tunjangan karyawan","tunjangan/manage_tunjangan.php","mid-large")
+			uni_modal("<i class='fa fa-plus'></i> Tambah data penggajian karyawan","penggajian/manage_penggajian.php","mid-large")
 		})
 		$('.edit_data').click(function(){
 			uni_modal("<i class='fa fa-edit'></i> Edit data tunjangan karyawan","tunjangan/manage_tunjangan.php?id="+$(this).attr('data-id'),"mid-large")

@@ -183,13 +183,15 @@ Class Master extends DBConnection {
 		
 		if($this->capture_err())
 			return $this->capture_err();
-		if($check > 0){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Data absensi pada bulan ini sudah ada.";
-			return json_encode($resp);
-			exit;
-		}
+		
 		if(empty($id)){
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Data absensi pada bulan ini sudah ada.";
+				return json_encode($resp);
+				exit;
+			}
+
 			$sql = "INSERT INTO `absensi` set id_karyawan = '$id_karyawan' , bulan = '$bulan' , hadir = '$hadir' , absen = '$absen' , lembur = '$lembur' , izin = '$izin'";
 			$save = $this->conn->query($sql);
 		}else{
@@ -226,31 +228,40 @@ Class Master extends DBConnection {
 
 
 	function save_tunjangan(){
-		extract($_POST);
 		
-		$id = $_POST['id_tunjangan'];		
+		extract($_POST);
+		$id = $_POST['id'];		
 		$id_karyawan = $_POST['text_id_karyawan'];
 		$t_kesehatan = $_POST['t_kesehatan'];
 		$t_makan = $_POST['t_makan'];
 		$t_transport = $_POST['t_transport'];
 		$t_kasir = $_POST['t_kasir'];
 		$t_kerajinan = $_POST['t_kerajinan'];
+		
+		
+		
 
-		$check = $this->conn->query("SELECT * from tunjangan WHERE id_tunjangan = '$id' and id_karyawan = '$id_karyawan'")->num_rows;
+		$check = $this->conn->query("SELECT * from tunjangan WHERE id_karyawan = '$id_karyawan'")->num_rows;
 		
 		if($this->capture_err())
 			return $this->capture_err();
-		if($check > 0){
-			$resp['status'] = 'failed';
-			$resp['msg'] = "Data tunjangan sudah ada.";
-			return json_encode($resp);
-			exit;
-		}
+		
+
 		if(empty($id)){
-			$sql = "INSERT INTO `tunjangan` set id_tunjangan ='$id', id_karyawan = '$id_karyawan' , kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan'";
+			
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Data tunjangan karyawan ini sudah ada.";
+				return json_encode($resp);
+				exit;
+			}
+
+			$sql = "INSERT INTO `tunjangan` set id_karyawan = '$id_karyawan' , t_kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_makeup ='$t_makeup', t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan'";
 			$save = $this->conn->query($sql);
 		}else{
-			$sql = "UPDATE `tunjangan` set id_tunjangan ='$id', id_karyawan = '$id_karyawan' , kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan' where id = '{$id}' ";
+
+					
+			$sql = "UPDATE `tunjangan` set id_karyawan = '$id_karyawan' , t_kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_makeup ='$t_makeup' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan' where id_tunjangan = '{$id}' ";
 			$save = $this->conn->query($sql);
 		
 		}
@@ -779,6 +790,12 @@ switch ($action) {
 	break;
 	case 'delete_absensi':
 		echo $Master->delete_absensi();
+	break;
+	case 'save_tunjangan':
+		echo $Master->save_tunjangan();
+	break;
+	case 'delete_tunjangan':
+		echo $Master->delete_tunjangan();
 	break;
 	case 'get_item':
 		echo $Master->get_item();
