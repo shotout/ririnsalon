@@ -10,7 +10,7 @@
         <div class="container-fluid">
 			<table class="table table-hovered table-striped">
 				<colgroup>
-					<col width="5%">
+					<!-- <col width="5%"> -->
 					<col width="15%">
 					<col width="25%">
 					<col width="20%">
@@ -19,7 +19,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>ID</th>						
+						<!-- <th>ID</th>						 -->
 						<th>Nama</th>						
 						<th>No HP</th>
                         <th>Jabatan</th>                        
@@ -35,7 +35,7 @@
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
-                            <td><?php echo $row['id'] ?></td>	
+                            <!-- <td><?php echo $row['id'] ?></td>	 -->
                             <td><?php echo $row['nama'] ?></td>                            
                             <td><?php echo $row['nohp'] ?></td>	
                             <td>

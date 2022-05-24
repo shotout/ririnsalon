@@ -19,6 +19,9 @@
                 <div class="col-12">
                     
                     <dl>
+                        <dt class="text-info">ID Karyawan:</dt>
+                        <dd class="pl-3"><?php echo $id ?></dd>
+                    
                         <dt class="text-info">Nama:</dt>
                         <dd class="pl-3"><?php echo $nama ?></dd>
 

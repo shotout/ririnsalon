@@ -33,14 +33,16 @@
                       </a>
                     </li>
 
-                    <!-- <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=purchase_order" class="nav-link nav-purchase_order">
+                    <li class="nav-header">Keuangan</li>
+
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
                         <i class="nav-icon fas fa-th-list"></i>
                         <p>
-                          Purchase Order test
+                          Pemasukan
                         </p>
                       </a>
-                    </li> -->
+                    </li>
 
                     <!-- <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=receiving" class="nav-link nav-receiving">

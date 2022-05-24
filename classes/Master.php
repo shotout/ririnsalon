@@ -293,6 +293,75 @@ Class Master extends DBConnection {
 	}
 
 
+	
+
+	function save_pemasukan(){
+		
+		extract($_POST);
+		$noreferensi = $_POST['noreferensi'];		
+		$tanggalpemasukan = $_POST['tanggalpemasukan'];
+		$amount = $_POST['amount'];
+		$keteranganmasuk = $_POST['keteranganmasuk'];
+		
+		
+		
+		$check = $this->conn->query("SELECT * from pemasukan WHERE noreferensi = '$noreferensi'")->num_rows;
+		
+		if($this->capture_err())
+			return $this->capture_err();
+		
+
+		if(empty($id)){
+			
+			if($check = 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Data tunjangan karyawan ini sudah ada.";
+				return json_encode($resp);
+				exit;
+			}
+
+			$sql = "INSERT INTO `pemasukan` set noreferensi = '$noreferensi' , tanggalpemasukan = '$tanggalpemasukan' , amount = '$amount' , keteranganmasuk ='$keteranganmasuk'";
+			$save = $this->conn->query($sql);
+		
+
+				
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data pemasukan berhasil disimpan.");
+			
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function delete_pemasukan(){
+		extract($_POST);
+		$id = $_POST['noreferensi'];
+		$del = $this->conn->query("DELETE FROM `pemasukan` where noreferensi = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Data tunjangan karyawan berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+
+
+
+
+
+
+
+
+	
+
 	function save_po(){
 		if(empty($_POST['id'])){
 			$prefix = "PO";
@@ -796,6 +865,12 @@ switch ($action) {
 	break;
 	case 'delete_tunjangan':
 		echo $Master->delete_tunjangan();
+	break;
+	case 'save_pemasukan':
+		echo $Master->save_pemasukan();
+	break;
+	case 'delete_pemasukan':
+		echo $Master->delete_pemasukan();
 	break;
 	case 'get_item':
 		echo $Master->get_item();
