@@ -30,13 +30,13 @@ foreach($user->fetch_array() as $k =>$v){
 				<div class="form-group">
 					<label for="password">Password</label>
 					<input type="password" name="password" id="password" class="form-control" value="" autocomplete="off">
-					<small><i>Leave this blank if you dont want to change the password.</i></small>
+					<small><i>Kosongkan jika tidak ingin mengganti password.</i></small>
 				</div>
 				<div class="form-group">
 					<label for="" class="control-label">Avatar</label>
 					<div class="custom-file">
 		              <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
-		              <label class="custom-file-label" for="customFile">Choose file</label>
+		              <label class="custom-file-label" for="customFile">Pilih file</label>
 		            </div>
 				</div>
 				<div class="form-group d-flex justify-content-center">

@@ -34,7 +34,6 @@
                     </li>
 
                     <li class="nav-header">Keuangan</li>
-
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
                         <i class="nav-icon fas fa-money-check"></i>
@@ -53,14 +52,14 @@
                       </a>
                     </li>
 
-                    <!-- <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=kas/kas" class="nav-link nav-purchase_order">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
                           Kas
                         </p>
                       </a>
-                    </li> -->
+                    </li>
 
                     <!-- <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=receiving" class="nav-link nav-receiving">
@@ -118,16 +117,16 @@
                       </a>
                     </li>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=penggajian/penggajian" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-dollar-sign"></i>
                         <p>
                           Penggajian
                         </p>
                       </a>
-                    </li>
+                    </li> -->
 
-                    <!-- <?php if($_settings->userdata('type') == 1): ?> -->
+                    <?php if($_settings->userdata('type') == 1): ?>
                     <li class="nav-header">Maintenance</li>
                     <!-- <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=maintenance/supplier" class="nav-link nav-maintenance_supplier">

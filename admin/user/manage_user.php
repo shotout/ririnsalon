@@ -33,7 +33,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<label for="password">Password</label>
 					<input type="password" name="password" id="password" class="form-control" value="" autocomplete="off" <?php echo isset($meta['id']) ? "": 'required' ?>>
                     <?php if(isset($_GET['id'])): ?>
-					<small class="text-info"><i>Leave this blank if you dont want to change the password.</i></small>
+					<small class="text-info"><i>Kosongkan jika tidak ingin mengganti password.</i></small>
                     <?php endif; ?>
 				</div>
 				<div class="form-group col-6">
@@ -47,7 +47,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<label for="" class="control-label">Avatar</label>
 					<div class="custom-file">
 		              <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
-		              <label class="custom-file-label" for="customFile">Choose file</label>
+		              <label class="custom-file-label" for="customFile">Pilih file</label>
 		            </div>
 				</div>
 				<div class="form-group col-6 d-flex justify-content-center">
