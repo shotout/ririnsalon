@@ -1,7 +1,6 @@
 <?php
-require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT id_penggajian,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian 
+    $qry = $conn->query("SELECT id_penggajian,jabatan,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian 
     JOIN karyawan ON penggajian.id_karyawan = karyawan.id 
     JOIN absensi ON penggajian.id_absensi = absensi.id
     JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan WHERE id_penggajian = '{$_GET['id']}' ");
@@ -39,8 +38,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <div class="container-fluid">
             
                 <div class="row">
-                    
-                    <div class="col-md-6">
+
+                <div class="col-md-4">
                         <label class="control-label text-info" >ID Karyawan</label>
 
 						<div class="row-md-1">
@@ -50,47 +49,93 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
                     <div class="col-md-6">
                         <div class="form-group">                          
-                            
+                        
                             <label for="karyawan" class="control-label text-info">Karyawan</label>
+                            
                             <select name="nama_karyawan" id="nama_karyawan" class="custom-select select2">
                                                         
                             <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
-
+                            
 							<?php 
-                            $karyawan = $conn->query("SELECT id,nama FROM karyawan ORDER BY id ASC");
-                            while($row=$karyawan->fetch_assoc()):
-                            ?>
-                            							
-                            <option value="<?php echo $row['id'] ?>" 
-                            <?php echo isset($id) && $id == $row['id'] ? 'selected disabled' : "" ?>><?php echo $row['nama'] ?>
-
-							</option>							
-                            <?php endwhile;  ?>                        
+                            $option="";
+                            
+                            $karyawan = $conn->query("SELECT id,nama,jabatan FROM karyawan ORDER BY id ASC");
+                            while($row=$karyawan->fetch_assoc()){
+                                
+                                $option .= '<option value="'.$row["id"].'">'.$row["nama"].'</option>';
+                                
+                            }  
+                             echo $option; 
+                                
+                            ?>                          						 
                             </select>                           
 
                         </div>
                     </div>
                      
+                    <div class="col-md-4">
+                        <label class="control-label text-info" >Jabatan</label>                     
+                                   
+						<div class="row-md-1">
+                        <?php 
+                                $id = array();
+                                $jbt = array();
+                                
+                                $sql = $conn->query("SELECT id,jabatan FROM karyawan where  id = '7' ");
+                                while($row=$sql->fetch_assoc()):
+                                    $id[$row['id']] = $row;
+                                    $jabatan[$row['id']] = $row['jabatan'];                                    
+                                endwhile;
+                            ?>           
+                        <input type="text" name = "jabatan" id = "jabatan" class="form-control rounded-0" readonly ?></input>
+						</div>                       
+                    </div>
                     
 
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <div class="form-group">                          
                             
-                            <label for="karyawan" class="control-label text-info">Bulan</label>
-                            <select name="bulan" id="bulan" class="custom-select select3">
-                                                        
-                            <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
+                            <label for="bulan" class="control-label text-info">Bulan</label>
+                            <select  name = "bulan" id="bulan" class="custom-select select3">
+                                    <option selected></option>
+                                    
+                                    <option value="1" 
+                                    <?php echo isset($bulan) && $bulan == 1 ? 'selected': '' ?>>Januari</option>
+                                     
+                                    <option value="2" 
+                                    <?php echo isset($bulan) && $bulan == 2 ? 'selected': '' ?>>Februari</option>
 
-							<?php 
-                            $karyawan = $conn->query("SELECT id,nama FROM karyawan ORDER BY id ASC");
-                            while($row=$karyawan->fetch_assoc()):
-                            ?>
-                            							
-                            <option value="<?php echo $row['id'] ?>" 
-                            <?php echo isset($id) && $id == $row['id'] ? 'selected disabled' : "" ?>><?php echo $row['nama'] ?>
+                                    <option value="3" 
+                                    <?php echo isset($bulan) && $bulan == 3 ? 'selected': '' ?>>Maret</option>
 
-							</option>							
-                            <?php endwhile;  ?>                        
+                                    <option value="4" 
+                                    <?php echo isset($bulan) && $bulan == 4 ? 'selected': '' ?>>April</option>
+
+                                    <option value="5" 
+                                    <?php echo isset($bulan) && $bulan == 5 ? 'selected': '' ?>>Mei</option>
+
+                                    <option value="6" 
+                                    <?php echo isset($bulan) && $bulan == 6 ? 'selected': '' ?>>Juni</option>
+
+                                    <option value="7" 
+                                    <?php echo isset($bulan) && $bulan == 7 ? 'selected': '' ?>>Juli</option>
+
+                                    <option value="8" 
+                                    <?php echo isset($bulan) && $bulan == 8 ? 'selected': '' ?>>Agustus</option>
+
+                                    <option value="9" 
+                                    <?php echo isset($bulan) && $bulan == 9 ? 'selected': '' ?>>September</option>
+
+                                    <option value="10" 
+                                    <?php echo isset($bulan) && $bulan == 10 ? 'selected': '' ?>>Oktober</option>
+
+                                    <option value="11" 
+                                    <?php echo isset($bulan) && $bulan == 11 ? 'selected': '' ?>>November</option>
+
+                                    <option value="12" 
+                                    <?php echo isset($bulan) && $bulan == 12 ? 'selected': '' ?>>Desember</option>
+                                    
+                                </select>                        
                             </select>                            
 
                         </div>
@@ -156,11 +201,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </div>
 
 <script>
-        
+
+
+
+
 	$('#nama_karyawan').change(function(){
 		tes = $('#nama_karyawan').val();
 		// $('#text_id_karyawan').text(tes);
         $("#text_id_karyawan").val(tes);
+
+        
+		jbt = $jabatan;
+		// $('#text_id_karyawan').text(tes);
+        $("#jabatan").val(jbt);     
+        
 	})
 
     

@@ -2,7 +2,7 @@
 	<div class="card-header">
 		<h3 class="card-title">Penggajian Karyawan</h3>
 		<div class="card-tools">
-		<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Penggajian</a>
+		<a href="?page=penggajian/manage_penggajian" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Penggajian</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -76,11 +76,11 @@
 		$('#create_new').click(function(){
 			uni_modal("<i class='fa fa-plus'></i> Tambah data penggajian karyawan","penggajian/manage_penggajian.php","mid-large")
 		})
-		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit data tunjangan karyawan","tunjangan/manage_tunjangan.php?id="+$(this).attr('data-id'),"mid-large")
-		})
+		// $('.edit_data').click(function(){
+		// 	uni_modal("<i class='fa fa-edit'></i> Edit data gaji karyawan","tunjangan/manage_tunjangan.php?id="+$(this).attr('data-id'),"mid-large")
+		// })
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-box'></i> Detail tunjangan karyawan","tunjangan/view_tunjangan.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-box'></i> Detail gaji karyawan","tunjangan/view_tunjangan.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();

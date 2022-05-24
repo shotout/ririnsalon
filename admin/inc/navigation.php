@@ -100,7 +100,7 @@
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=penggajian/penggajian" class="nav-link nav-sales">
-                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <i class="nav-icon fas fa-dollar-sign"></i>
                         <p>
                           Penggajian
                         </p>
