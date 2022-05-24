@@ -19,9 +19,9 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>No. Referensi</th>						
 						<th>Tanggal</th>						
-						<th>Amount</th>
+						<th>Pemasukan</th>						
+						<th>Pengeluaran</th>
 						                        
 						<th>Action</th>
 					</tr>
@@ -29,13 +29,14 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * from pemasukan order by tanggalpemasukan asc ");
+						$qry = $conn->query("SELECT tanggal_pengeluaran, SUM(amount_pengeluaran)
+						FROM pengeluaran GROUP BY tanggal_pengeluaran ORDER BY tanggal_pengeluaran DESC");
 						while($row = $qry->fetch_assoc()):
 						
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
-                            <td><?php echo $row['noreferensi'] ?></td>
+                            <td><?php echo $row['tanggalpemasukan'] ?></td>
 							<td><?php echo date("d M Y",strtotime($row['tanggalpemasukan'])) ?></td>	
                             <td><?php echo $row['amount'] ?></td>                            
                                          	

@@ -310,15 +310,9 @@ Class Master extends DBConnection {
 		if($this->capture_err())
 			return $this->capture_err();
 		
-
-		if(empty($id)){
 			
-			if($check = 0){
-				$resp['status'] = 'failed';
-				$resp['msg'] = "Data tunjangan karyawan ini sudah ada.";
-				return json_encode($resp);
-				exit;
-			}
+		if(empty($id)){			
+			
 
 			$sql = "INSERT INTO `pemasukan` set noreferensi = '$noreferensi' , tanggalpemasukan = '$tanggalpemasukan' , amount = '$amount' , keteranganmasuk ='$keteranganmasuk'";
 			$save = $this->conn->query($sql);
@@ -340,11 +334,10 @@ Class Master extends DBConnection {
 
 	function delete_pemasukan(){
 		extract($_POST);
-		$id = $_POST['noreferensi'];
-		$del = $this->conn->query("DELETE FROM `pemasukan` where noreferensi = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `pemasukan` where idpemasukan = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Data tunjangan karyawan berhasil dihapus.");
+			$this->settings->set_flashdata('success',"Data pemasukan berhasil dihapus.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
@@ -356,7 +349,56 @@ Class Master extends DBConnection {
 
 
 
+	function save_pengeluaran(){
+		
+		extract($_POST);
+		$noreferensi = $_POST['noreferensi_pengeluaran'];		
+		$tanggal_pengeluaran = $_POST['tanggal_pengeluaran'];
+		$amount = $_POST['amount_pengeluaran'];
+		$keterangankeluar = $_POST['keterangankeluar'];
+		
+		
+		
+		$check = $this->conn->query("SELECT * from pengeluaran WHERE noreferensi_pengeluaran = '$noreferensi'")->num_rows;
+		
+		if($this->capture_err())
+			return $this->capture_err();
+		
+			
+		if(empty($id)){			
+			
 
+			$sql = "INSERT INTO `pengeluaran` set noreferensi_pengeluaran = '$noreferensi' , tanggal_pengeluaran = '$tanggal_pengeluaran' , amount_pengeluaran = '$amount' , keterangankeluar ='$keterangankeluar'";
+			$save = $this->conn->query($sql);
+		
+
+				
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data pengeluaran berhasil disimpan.");
+			
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function delete_pengeluaran(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `pengeluaran` where idpengeluaran = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Data pengeluaran berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
 
 
 
@@ -842,12 +884,13 @@ $Master = new Master();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 $sysset = new SystemSettings();
 switch ($action) {
-	case 'save_supplier':
-		echo $Master->save_supplier();
-	break;
-	case 'delete_supplier':
-		echo $Master->delete_supplier();
-	break;
+	// case 'save_supplier':
+	// 	echo $Master->save_supplier();
+	// break;
+	// case 'delete_supplier':
+	// 	echo $Master->delete_supplier();
+	// break;
+
 	case 'save_karyawan':
 		echo $Master->save_karyawan();
 	break;
@@ -872,34 +915,45 @@ switch ($action) {
 	case 'delete_pemasukan':
 		echo $Master->delete_pemasukan();
 	break;
-	case 'get_item':
-		echo $Master->get_item();
 	break;
-	case 'save_po':
-		echo $Master->save_po();
+	case 'save_pengeluaran':
+		echo $Master->save_pengeluaran();
 	break;
-	case 'delete_po':
-		echo $Master->delete_po();
+	case 'delete_pengeluaran':
+		echo $Master->delete_pengeluaran();
 	break;
-	case 'save_receiving':
-		echo $Master->save_receiving();
-	break;
-	case 'delete_receiving':
-		echo $Master->delete_receiving();
-	break;
-	case 'save_return':
-		echo $Master->save_return();
-	break;
-	case 'delete_return':
-		echo $Master->delete_return();
-	break;
-	case 'save_sale':
-		echo $Master->save_sale();
-	break;
-	case 'delete_sale':
-		echo $Master->delete_sale();
-	break;
+
+
+	// case 'get_item':
+	// 	echo $Master->get_item();
+	// break;
+	// case 'save_po':
+	// 	echo $Master->save_po();
+	// break;
+	// case 'delete_po':
+	// 	echo $Master->delete_po();
+	// break;
+	// case 'save_receiving':
+	// 	echo $Master->save_receiving();
+	// break;
+	// case 'delete_receiving':
+	// 	echo $Master->delete_receiving();
+	// break;
+	// case 'save_return':
+	// 	echo $Master->save_return();
+	// break;
+	// case 'delete_return':
+	// 	echo $Master->delete_return();
+	// break;
+	// case 'save_sale':
+	// 	echo $Master->save_sale();
+	// break;
+	// case 'delete_sale':
+	// 	echo $Master->delete_sale();
+	// break;
 	default:
+
+
 		// echo $sysset->index();
 		break;
 }

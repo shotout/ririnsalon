@@ -1,6 +1,6 @@
 <?php require_once('./../../config.php') ?>
 <?php 
- $qry = $conn->query("SELECT * from pemasukan where idpemasukan = '{$_GET['id']}' ");
+ $qry = $conn->query("SELECT * from pengeluaran where idpengeluaran = '{$_GET['id']}' ");
  if($qry->num_rows > 0){
      foreach($qry->fetch_assoc() as $k => $v){
          $$k=$v;
@@ -20,16 +20,16 @@
                     
                     <dl>
                         <dt class="text-info">No Referensi:</dt>
-                        <dd class="pl-3"><?php echo $noreferensi ?></dd>
+                        <dd class="pl-3"><?php echo $noreferensi_pengeluaran ?></dd>
 
-                        <dt class="text-info">Tanggal Pemasukan:</dt>
-                        <dd class="pl-3"><?php echo isset($tanggalpemasukan) ? date('d M Y', strtotime($tanggalpemasukan)) : '' ?></dd>
+                        <dt class="text-info">Tanggal Pengeluaran:</dt>
+                        <dd class="pl-3"><?php echo isset($tanggal_pengeluaran) ? date('d M Y', strtotime($tanggal_pengeluaran)) : '' ?></dd>
 
                         <dt class="text-info">Amount:</dt>
-                        <dd class="pl-3"><?php echo isset($amount) ? "Rp " . number_format($amount,0) : '' ?></dd>
+                        <dd class="pl-3"><?php echo isset($amount_pengeluaran) ? "Rp " . number_format($amount_pengeluaran,0) : '' ?></dd>
 
                         <dt class="text-info">Keterangan:</dt>
-                        <dd class="pl-3"><?php echo isset($keteranganmasuk) ? $keteranganmasuk : '' ?></dd>                                             
+                        <dd class="pl-3"><?php echo isset($keterangankeluar) ? $keterangankeluar : '' ?></dd>                                             
                         
 
                         

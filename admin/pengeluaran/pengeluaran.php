@@ -1,6 +1,6 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Daftar Pemasukan</h3>
+		<h3 class="card-title">Daftar Pengeluaran</h3>
 		<div class="card-tools">
 			<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data</a>
 		</div>
@@ -29,15 +29,15 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * from pemasukan order by tanggalpemasukan asc ");
+						$qry = $conn->query("SELECT * from pengeluaran order by tanggal_pengeluaran asc ");
 						while($row = $qry->fetch_assoc()):
 						
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
-                            <td><?php echo $row['noreferensi'] ?></td>
-							<td><?php echo date("d M Y",strtotime($row['tanggalpemasukan'])) ?></td>	
-                            <td><?php echo $row['amount'] ?></td>                            
+                            <td><?php echo $row['noreferensi_pengeluaran'] ?></td>
+							<td><?php echo date("d M Y",strtotime($row['tanggal_pengeluaran'])) ?></td>	
+                            <td><?php echo $row['amount_pengeluaran'] ?></td>                            
                                          	
 																		
 							<td align="center">
@@ -46,11 +46,11 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idpemasukan'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idpengeluaran'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <!-- <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['idpemasukan'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a> -->
+				                    <!-- <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['idpengeluaran'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a> -->
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpemasukan'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpengeluaran'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
 							</td>
 						</tr>
@@ -64,16 +64,16 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Yakin ingin menghapus data pemasukan ini?","delete_category",[$(this).attr('data-id')])
+			_conf("Yakin ingin menghapus data pengeluaran ini?","delete_category",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Tambah Data Pemasukan","pemasukan/manage_pemasukan.php","mid-large")
+			uni_modal("<i class='fa fa-plus'></i> Tambah Data Pengeluaran","pengeluaran/manage_pengeluaran.php","mid-large")
 		})
 		// $('.edit_data').click(function(){
 		// 	uni_modal("<i class='fa fa-edit'></i> Edit Data Karyawan","karyawan/manage_karyawan.php?id="+$(this).attr('data-id'),"mid-large")
 		// })
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-box'></i> Detail Data Pemasukan","pemasukan/view_pemasukan.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-box'></i> Detail Data Pengeluaran","pengeluaran/view_pengeluaran.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();
@@ -81,7 +81,7 @@
 	function delete_category($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_pemasukan",
+			url:_base_url_+"classes/Master.php?f=delete_pengeluaran",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

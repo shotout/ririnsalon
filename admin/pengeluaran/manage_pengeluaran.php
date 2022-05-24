@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `pemasukan` where idpemasukan = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `pengeluaran` where idpengeluaran = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -10,10 +10,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 }
 ?>
 <div class="container-fluid">
-	<form action="" id="pemasukan-form">
+	<form action="" id="pengeluaran-form">
 	<div class="form-group">
 	<?php
-	$qry = $conn->query("SELECT MAX(noreferensi) AS kodeTerbesar FROM pemasukan;");
+	$qry = $conn->query("SELECT MAX(noreferensi_pengeluaran) AS kodeTerbesar FROM pengeluaran;");
 	$data = mysqli_fetch_array($qry);
 	$koderef = $data['kodeTerbesar'];
  
@@ -23,31 +23,31 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
  
 	// bilangan yang diambil ini ditambah 1 untuk menentukan nomor urut berikutnya
 	$urutan++; 
-	$huruf = "MREF";
+	$huruf = "KREF";
 	$koderef = $huruf . sprintf("%04s", $urutan);
 	
 	?>
 
-			<input type="hidden" name="idpemasukan" id="idpemasukan" class="form-control rounded-0" value= "<?php echo isset($idpemasukan) ? $idpemasukan : ''  ?>" readonly>
+			<input type="hidden" name="idpengeluaran" id="idpengeluaran" class="form-control rounded-0" value= "<?php echo isset($idpengeluaran) ? $idpengeluaran : ''  ?>" readonly>
 
 			<label for="noreferensi" class="control-label">No Referensi</label>
-			<input type="text" name="noreferensi" id="noreferensi" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly>
+			<input type="text" name="noreferensi_pengeluaran" id="noreferensi_pengeluaran" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly>
 		</div>
 		
 		<div class="form-group">
-			<label for="tanggalpemasukan" class="control-label">Tanggal Masuk</label>
-			<input type="date" name="tanggalpemasukan" id="tanggalpemasukan" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggalpemasukan) ? $tanggalpemasukan : ''; ?>">
+			<label for="tanggal_pengeluaran" class="control-label">Tanggal Masuk</label>
+			<input type="date" name="tanggal_pengeluaran" id="tanggal_pengeluaran" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggal_pengeluaran) ? $tanggal_pengeluaran : ''; ?>">
 		</div>			
         
         <div class="form-group">
-			<label for="amount" class="control-label">Amount</label>
-			<input type="number" name="amount" id="amount" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($amount) ? $amount : ''; ?>">
+			<label for="amount_pengeluaran" class="control-label">Amount</label>
+			<input type="number" name="amount_pengeluaran" id="amount_pengeluaran" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($amount_pengeluaran) ? $amount_pengeluaran : ''; ?>">
 		</div>
         
 
 		<div class="form-group">
-			<label for="keteranganmasuk" class="control-label">Keterangan</label>
-			<textarea type="text" name="keteranganmasuk" id="keteranganmasuk" class="form-control rounded-0" value="<?php echo isset($keteranganmasuk) ? $keteranganmasuk : ''; ?>"></textarea>
+			<label for="keterangankeluar" class="control-label">Keterangan</label>
+			<textarea type="text" name="keterangankeluar" id="keterangankeluar" class="form-control rounded-0" value="<?php echo isset($keterangankeluar) ? $keterangankeluar : ''; ?>"></textarea>
 		</div>
 
         
@@ -58,13 +58,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
   
 	$(document).ready(function(){
         
-		$('#pemasukan-form').submit(function(e){
+		$('#pengeluaran-form').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
 			 $('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_pemasukan",
+				url:_base_url_+"classes/Master.php?f=save_pengeluaran",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

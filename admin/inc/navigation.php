@@ -37,12 +37,30 @@
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
-                        <i class="nav-icon fas fa-th-list"></i>
+                        <i class="nav-icon fas fa-money-check"></i>
                         <p>
                           Pemasukan
                         </p>
                       </a>
                     </li>
+
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=pengeluaran/pengeluaran" class="nav-link nav-purchase_order">
+                        <i class="nav-icon fas fa-money-check-alt"></i>
+                        <p>
+                          Pengeluaran
+                        </p>
+                      </a>
+                    </li>
+
+                    <!-- <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                          Kas
+                        </p>
+                      </a>
+                    </li> -->
 
                     <!-- <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=receiving" class="nav-link nav-receiving">

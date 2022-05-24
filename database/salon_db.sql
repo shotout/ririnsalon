@@ -31,15 +31,15 @@ CREATE TABLE `absensi` (
   PRIMARY KEY (`id`),
   KEY `absensi_ibfk_1` (`id_karyawan`),
   CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `absensi` */
 
 insert  into `absensi`(`id`,`id_karyawan`,`bulan`,`hadir`,`absen`,`lembur`,`izin`) values 
-(6,7,'1',20,6,0,0),
+(6,7,'1',20,8,2,0),
 (7,7,'2',20,6,0,0),
 (8,8,'1',1,1,1,1),
-(9,7,'3',1,1,1,1),
+(9,7,'3',10,1,1,1),
 (10,8,'4',1,1,1,1),
 (11,7,'10',4,3,6,1);
 
@@ -67,94 +67,6 @@ insert  into `admin`(`id`,`nama`,`username`,`password`,`avatar`,`last_login`,`ty
 (11,'Karyawan','karyawan','9e014682c94e0f2cc834bf7348bda428','uploads/avatar-11.png?v=1635920566',NULL,2,'2021-11-03 14:22:46','2022-05-19 12:05:12'),
 (15,'Admin','admin','21232f297a57a5a743894a0e4a801fc3',NULL,NULL,1,'2022-05-19 12:06:33',NULL);
 
-/*Table structure for table `back_order_list` */
-
-DROP TABLE IF EXISTS `back_order_list`;
-
-CREATE TABLE `back_order_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `receiving_id` int(30) NOT NULL,
-  `po_id` int(30) NOT NULL,
-  `bo_code` varchar(50) NOT NULL,
-  `supplier_id` int(30) NOT NULL,
-  `amount` float NOT NULL,
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
-  `remarks` text,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = partially received, 2 =received',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `supplier_id` (`supplier_id`),
-  KEY `po_id` (`po_id`),
-  KEY `receiving_id` (`receiving_id`),
-  CONSTRAINT `back_order_list_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier_list` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `back_order_list_ibfk_2` FOREIGN KEY (`po_id`) REFERENCES `purchase_order_list` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `back_order_list_ibfk_3` FOREIGN KEY (`receiving_id`) REFERENCES `receiving_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `back_order_list` */
-
-insert  into `back_order_list`(`id`,`receiving_id`,`po_id`,`bo_code`,`supplier_id`,`amount`,`discount_perc`,`discount`,`tax_perc`,`tax`,`remarks`,`status`,`date_created`,`date_updated`) values 
-(1,1,1,'BO-0001',1,40740,3,1125,12,4365,NULL,1,'2021-11-03 11:20:38','2021-11-03 11:20:51'),
-(2,2,1,'BO-0002',1,20370,3,562.5,12,2182.5,NULL,2,'2021-11-03 11:20:51','2021-11-03 11:21:00'),
-(3,4,2,'BO-0003',2,42826,5,2012.5,12,4588.5,NULL,1,'2021-11-03 11:51:41','2021-11-03 11:52:02'),
-(4,5,2,'BO-0004',2,10640,5,500,12,1140,NULL,2,'2021-11-03 11:52:02','2021-11-03 11:52:15');
-
-/*Table structure for table `bo_items` */
-
-DROP TABLE IF EXISTS `bo_items`;
-
-CREATE TABLE `bo_items` (
-  `bo_id` int(30) NOT NULL,
-  `item_id` int(30) NOT NULL,
-  `quantity` int(30) NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
-  `unit` varchar(50) NOT NULL,
-  `total` float NOT NULL DEFAULT '0',
-  KEY `item_id` (`item_id`),
-  KEY `bo_id` (`bo_id`),
-  CONSTRAINT `bo_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `item_list` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `bo_items_ibfk_2` FOREIGN KEY (`bo_id`) REFERENCES `back_order_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `bo_items` */
-
-insert  into `bo_items`(`bo_id`,`item_id`,`quantity`,`price`,`unit`,`total`) values 
-(1,1,250,150,'pcs',37500),
-(2,1,125,150,'pcs',18750),
-(3,2,150,200,'Boxes',30000),
-(3,4,50,205,'pcs',10250),
-(4,2,50,200,'Boxes',10000);
-
-/*Table structure for table `item_list` */
-
-DROP TABLE IF EXISTS `item_list`;
-
-CREATE TABLE `item_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  `supplier_id` int(30) NOT NULL,
-  `cost` float NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `supplier_id` (`supplier_id`),
-  CONSTRAINT `item_list_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `item_list` */
-
-insert  into `item_list`(`id`,`name`,`description`,`supplier_id`,`cost`,`status`,`date_created`,`date_updated`) values 
-(1,'Item 101','Sample Only',1,150,1,'2021-11-02 10:01:55','2021-11-02 10:01:55'),
-(2,'Item 102','Sample only',2,200,1,'2021-11-02 10:02:12','2021-11-02 10:02:12'),
-(3,'Item 103','Sample',1,185,1,'2021-11-02 10:02:27','2021-11-02 10:02:27'),
-(4,'Item 104','Sample only',2,205,1,'2021-11-02 10:02:47','2021-11-02 10:02:47');
-
 /*Table structure for table `karyawan` */
 
 DROP TABLE IF EXISTS `karyawan`;
@@ -176,153 +88,68 @@ insert  into `karyawan`(`id`,`nama`,`alamat`,`nohp`,`jabatan`,`gajipokok`,`tangg
 (7,'Karyawan','Riau','08110239232',2,2000000,'2022-05-19'),
 (8,'Hevalo','Pekanbaru','123123132',2,2000000,'2022-05-19');
 
-/*Table structure for table `po_items` */
+/*Table structure for table `pemasukan` */
 
-DROP TABLE IF EXISTS `po_items`;
+DROP TABLE IF EXISTS `pemasukan`;
 
-CREATE TABLE `po_items` (
-  `po_id` int(30) NOT NULL,
-  `item_id` int(30) NOT NULL,
-  `quantity` int(30) NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
-  `unit` varchar(50) NOT NULL,
-  `total` float NOT NULL DEFAULT '0',
-  KEY `po_id` (`po_id`),
-  KEY `item_id` (`item_id`),
-  CONSTRAINT `po_items_ibfk_1` FOREIGN KEY (`po_id`) REFERENCES `purchase_order_list` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `po_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `pemasukan` (
+  `idpemasukan` int(11) NOT NULL AUTO_INCREMENT,
+  `noreferensi` varchar(50) DEFAULT NULL,
+  `tanggalpemasukan` date DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `keteranganmasuk` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`idpemasukan`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
-/*Data for the table `po_items` */
+/*Data for the table `pemasukan` */
 
-insert  into `po_items`(`po_id`,`item_id`,`quantity`,`price`,`unit`,`total`) values 
-(1,1,500,150,'pcs',75000),
-(2,2,300,200,'Boxes',60000),
-(2,4,200,205,'pcs',41000);
+insert  into `pemasukan`(`idpemasukan`,`noreferensi`,`tanggalpemasukan`,`amount`,`keteranganmasuk`) values 
+(6,'MREF0001','2022-05-17',100000,'555555');
 
-/*Table structure for table `purchase_order_list` */
+/*Table structure for table `pengeluaran` */
 
-DROP TABLE IF EXISTS `purchase_order_list`;
+DROP TABLE IF EXISTS `pengeluaran`;
 
-CREATE TABLE `purchase_order_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `po_code` varchar(50) NOT NULL,
-  `supplier_id` int(30) NOT NULL,
-  `amount` float NOT NULL,
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
-  `remarks` text NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 = pending, 1 = partially received, 2 =received',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `supplier_id` (`supplier_id`),
-  CONSTRAINT `purchase_order_list_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `pengeluaran` (
+  `idpengeluaran` int(11) NOT NULL AUTO_INCREMENT,
+  `noreferensi_pengeluaran` varchar(50) DEFAULT NULL,
+  `tanggal_pengeluaran` date DEFAULT NULL,
+  `amount_pengeluaran` int(11) DEFAULT NULL,
+  `keterangankeluar` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`idpengeluaran`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
-/*Data for the table `purchase_order_list` */
+/*Data for the table `pengeluaran` */
 
-insert  into `purchase_order_list`(`id`,`po_code`,`supplier_id`,`amount`,`discount_perc`,`discount`,`tax_perc`,`tax`,`remarks`,`status`,`date_created`,`date_updated`) values 
-(1,'PO-0001',1,81480,3,2250,12,8730,'Sample',2,'2021-11-03 11:20:22','2021-11-03 11:21:00'),
-(2,'PO-0002',2,107464,5,5050,12,11514,'Sample PO Only',2,'2021-11-03 11:50:50','2021-11-03 11:52:15');
+insert  into `pengeluaran`(`idpengeluaran`,`noreferensi_pengeluaran`,`tanggal_pengeluaran`,`amount_pengeluaran`,`keterangankeluar`) values 
+(10,'KREF0001','2022-05-17',4000,'hhhhh'),
+(11,'KREF0002','2022-05-17',6000,'ffff'),
+(12,'KREF0003','2022-05-16',50000,'ddd');
 
-/*Table structure for table `receiving_list` */
+/*Table structure for table `penggajian` */
 
-DROP TABLE IF EXISTS `receiving_list`;
+DROP TABLE IF EXISTS `penggajian`;
 
-CREATE TABLE `receiving_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `form_id` int(30) NOT NULL,
-  `from_order` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1=PO ,2 = BO',
-  `amount` float NOT NULL DEFAULT '0',
-  `discount_perc` float NOT NULL DEFAULT '0',
-  `discount` float NOT NULL DEFAULT '0',
-  `tax_perc` float NOT NULL DEFAULT '0',
-  `tax` float NOT NULL DEFAULT '0',
-  `stock_ids` text,
-  `remarks` text,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `penggajian` (
+  `id_penggajian` int(11) NOT NULL AUTO_INCREMENT,
+  `id_karyawan` int(11) DEFAULT NULL,
+  `id_absensi` int(11) DEFAULT NULL,
+  `id_tunjangan` int(11) DEFAULT NULL,
+  `point` int(11) DEFAULT NULL,
+  `bonus` int(11) DEFAULT NULL,
+  `p_cashbon` int(11) DEFAULT NULL,
+  `p_lain` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_penggajian`),
+  KEY `id_karyawan` (`id_karyawan`),
+  KEY `penggajian_ibfk_2` (`id_absensi`),
+  KEY `penggajian_ibfk_3` (`id_tunjangan`),
+  CONSTRAINT `penggajian_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `penggajian_ibfk_2` FOREIGN KEY (`id_absensi`) REFERENCES `absensi` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `penggajian_ibfk_3` FOREIGN KEY (`id_tunjangan`) REFERENCES `penggajian` (`id_penggajian`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Data for the table `receiving_list` */
-
-insert  into `receiving_list`(`id`,`form_id`,`from_order`,`amount`,`discount_perc`,`discount`,`tax_perc`,`tax`,`stock_ids`,`remarks`,`date_created`,`date_updated`) values 
-(1,1,1,40740,3,1125,12,4365,'1','Sample','2021-11-03 11:20:38','2021-11-03 11:20:38'),
-(2,1,2,20370,3,562.5,12,2182.5,'2','','2021-11-03 11:20:51','2021-11-03 11:20:51'),
-(3,2,2,20370,3,562.5,12,2182.5,'3','Success','2021-11-03 11:21:00','2021-11-03 11:21:00'),
-(4,2,1,64638,5,3037.5,12,6925.5,'4,5','Sample Receiving (Partial)','2021-11-03 11:51:41','2021-11-03 11:51:41'),
-(5,3,2,32186,5,1512.5,12,3448.5,'6,7','BO Receive (Partial)','2021-11-03 11:52:02','2021-11-03 11:52:02'),
-(6,4,2,10640,5,500,12,1140,'8','Sample Success','2021-11-03 11:52:15','2021-11-03 11:52:15');
-
-/*Table structure for table `return_list` */
-
-DROP TABLE IF EXISTS `return_list`;
-
-CREATE TABLE `return_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `return_code` varchar(50) NOT NULL,
-  `supplier_id` int(30) NOT NULL,
-  `amount` float NOT NULL DEFAULT '0',
-  `remarks` text,
-  `stock_ids` text NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `supplier_id` (`supplier_id`),
-  CONSTRAINT `return_list_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `supplier_list` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `return_list` */
-
-insert  into `return_list`(`id`,`return_code`,`supplier_id`,`amount`,`remarks`,`stock_ids`,`date_created`,`date_updated`) values 
-(1,'R-0001',2,3025,'Sample Issue','16,17','2021-11-03 13:45:53','2021-11-03 13:45:53');
-
-/*Table structure for table `sales_list` */
-
-DROP TABLE IF EXISTS `sales_list`;
-
-CREATE TABLE `sales_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `sales_code` varchar(50) NOT NULL,
-  `client` text,
-  `amount` float NOT NULL DEFAULT '0',
-  `remarks` text,
-  `stock_ids` text NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `sales_list` */
-
-insert  into `sales_list`(`id`,`sales_code`,`client`,`amount`,`remarks`,`stock_ids`,`date_created`,`date_updated`) values 
-(1,'SALE-0001','John Smith',7625,'Sample Remarks','24,25,26','2021-11-03 14:03:30','2021-11-03 14:08:27');
-
-/*Table structure for table `supplier_list` */
-
-DROP TABLE IF EXISTS `supplier_list`;
-
-CREATE TABLE `supplier_list` (
-  `id` int(30) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  `address` text NOT NULL,
-  `cperson` text NOT NULL,
-  `contact` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `supplier_list` */
-
-insert  into `supplier_list`(`id`,`name`,`address`,`cperson`,`contact`,`status`,`date_created`,`date_updated`) values 
-(1,'Supplier 101','Sample Supplier Address 101','Supplier Staff 101','09123456789',1,'2021-11-02 09:36:19','2021-11-02 09:36:19'),
-(2,'Supplier 102','Sample Address 102','Supplier Staff 102','0987654332',1,'2021-11-02 09:36:54','2021-11-02 09:36:54');
+/*Data for the table `penggajian` */
 
 /*Table structure for table `system_info` */
 
@@ -350,22 +177,23 @@ insert  into `system_info`(`id`,`meta_field`,`meta_value`) values
 DROP TABLE IF EXISTS `tunjangan`;
 
 CREATE TABLE `tunjangan` (
-  `id_tunjangan` varchar(50) NOT NULL,
+  `id_tunjangan` int(11) NOT NULL AUTO_INCREMENT,
   `id_karyawan` int(11) DEFAULT NULL,
   `t_kesehatan` int(11) DEFAULT NULL,
   `t_makan` int(11) DEFAULT NULL,
+  `t_makeup` int(11) DEFAULT NULL,
   `t_transport` int(11) DEFAULT NULL,
   `t_kasir` int(11) DEFAULT NULL,
   `t_kerajinan` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_tunjangan`),
   KEY `id_karyawan` (`id_karyawan`),
   CONSTRAINT `tunjangan_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tunjangan` */
 
-insert  into `tunjangan`(`id_tunjangan`,`id_karyawan`,`t_kesehatan`,`t_makan`,`t_transport`,`t_kasir`,`t_kerajinan`) values 
-('TUN001',8,1,1,1,1,1);
+insert  into `tunjangan`(`id_tunjangan`,`id_karyawan`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`) values 
+(3,8,123123,12312312,200,14141,123123,1414);
 
 /*Table structure for table `user_meta` */
 
