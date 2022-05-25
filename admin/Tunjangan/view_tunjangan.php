@@ -19,25 +19,25 @@
                 <div class="col-12">
                     
                     <dl>
-                        <dt class="text-info">Nama:</dt>
+                        <dt class="text-info">Nama</dt>
                         <dd class="pl-3"><?php echo $nama ?></dd>
                         </br>
-                        <dt class="text-info">Tunjangan Kesehatan :</dt>
+                        <dt class="text-info">Tunjangan Kesehatan</dt>
                         <dd class="pl-3"><?php echo isset($t_kesehatan) ? "Rp " . number_format($t_kesehatan,0) : '' ?></dd>
 
-                        <dt class="text-info">Tunjangan Makan :</dt>
+                        <dt class="text-info">Tunjangan Makan</dt>
                         <dd class="pl-3"><?php echo isset($t_makan) ? "Rp " . number_format($t_makan,0) : '' ?></dd>
 
-                        <dt class="text-info">Tunjangan Make Up :</dt>
+                        <dt class="text-info">Tunjangan Make Up</dt>
                         <dd class="pl-3"><?php echo isset($t_makeup) ? "Rp " . number_format($t_makeup,0) : '' ?></dd>
 
-                        <dt class="text-info">Tunjangan Transport :</dt>
+                        <dt class="text-info">Tunjangan Transport</dt>
                         <dd class="pl-3"><?php echo isset($t_transport) ? "Rp " . number_format($t_transport,0) : '' ?></dd>
                         
-                        <dt class="text-info">Tunjangan Kasir :</dt>
+                        <dt class="text-info">Tunjangan Kasir</dt>
                         <dd class="pl-3"><?php echo isset($t_kasir) ? "Rp " . number_format($t_kasir,0) : '' ?></dd>
 
-                        <dt class="text-info">Tunjangan Kerajinan :</dt>
+                        <dt class="text-info">Tunjangan Kerajinan</dt>
                         <dd class="pl-3"><?php echo isset($t_kerajinan) ? "Rp " . number_format($t_kerajinan,0) : '' ?></dd>
                     </dl>
                 </div>

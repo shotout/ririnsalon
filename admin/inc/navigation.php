@@ -32,6 +32,23 @@
                         </p>
                       </a>
                     </li>
+                    <li class="nav-header">Bisnis</li>
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=jasa/jasa" class="nav-link nav-purchase_order">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>
+                          Jasa
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
+                        <i class="nav-icon fas fa-spa"></i>
+                        <p>
+                          Paket
+                        </p>
+                      </a>
+                    </li>
 
                     <li class="nav-header">Keuangan</li>
                     <li class="nav-item">
@@ -54,7 +71,7 @@
 
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=kas/kas" class="nav-link nav-purchase_order">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="nav-icon fas fa-book-open"></i>
                         <p>
                           Kas
                         </p>

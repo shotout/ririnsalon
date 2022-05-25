@@ -19,19 +19,19 @@
                 <div class="col-12">
                     
                     <dl>
-                        <dt class="text-info">ID Karyawan:</dt>
+                        <dt class="text-info">ID Karyawan</dt>
                         <dd class="pl-3"><?php echo $id ?></dd>
                     
-                        <dt class="text-info">Nama:</dt>
+                        <dt class="text-info">Nama</dt>
                         <dd class="pl-3"><?php echo $nama ?></dd>
 
-                        <dt class="text-info">Alamat:</dt>
+                        <dt class="text-info">Alamat</dt>
                         <dd class="pl-3"><?php echo isset($alamat) ? $alamat : '' ?></dd>
 
-                        <dt class="text-info">No. Handphone:</dt>
+                        <dt class="text-info">No. Handphone</dt>
                         <dd class="pl-3"><?php echo isset($nohp) ? $nohp : '' ?></dd>
 
-                        <dt class="text-info">Jabatan:</dt>
+                        <dt class="text-info">Jabatan</dt>
                         <dd class="pl-3">
                             <?php if($jabatan == 1): ?>
                                 <span>Hairstylist</span>
@@ -42,10 +42,10 @@
                             <?php endif; ?>
                         </dd>
                         
-                        <dt class="text-info">Gaji Pokok:</dt>
+                        <dt class="text-info">Gaji Pokok</dt>
                         <dd class="pl-3"><?php echo isset($gajipokok) ? "Rp " . number_format($gajipokok,0) : '' ?></dd>
 
-                        <dt class="text-info">Tanggal Masuk:</dt>
+                        <dt class="text-info">Tanggal Masuk</dt>
                         <dd class="pl-3"><?php echo isset($tanggalmasuk) ? date('d M Y', strtotime($tanggalmasuk)) : '' ?></dd>
                     </dl>
                 </div>

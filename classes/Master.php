@@ -238,9 +238,6 @@ Class Master extends DBConnection {
 		$t_kasir = $_POST['t_kasir'];
 		$t_kerajinan = $_POST['t_kerajinan'];
 		
-		
-		
-
 		$check = $this->conn->query("SELECT * from tunjangan WHERE id_karyawan = '$id_karyawan'")->num_rows;
 		
 		if($this->capture_err())
@@ -258,9 +255,7 @@ Class Master extends DBConnection {
 
 			$sql = "INSERT INTO `tunjangan` set id_karyawan = '$id_karyawan' , t_kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_makeup ='$t_makeup', t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan'";
 			$save = $this->conn->query($sql);
-		}else{
-
-					
+		}else{			
 			$sql = "UPDATE `tunjangan` set id_karyawan = '$id_karyawan' , t_kesehatan = '$t_kesehatan' , t_makan = '$t_makan' , t_makeup ='$t_makeup' , t_transport = '$t_transport' , t_kasir = '$t_kasir' , t_kerajinan = '$t_kerajinan' where id_tunjangan = '{$id}' ";
 			$save = $this->conn->query($sql);
 		
@@ -302,24 +297,18 @@ Class Master extends DBConnection {
 		$tanggalpemasukan = $_POST['tanggalpemasukan'];
 		$amount = $_POST['amount'];
 		$keteranganmasuk = $_POST['keteranganmasuk'];
-		
-		
-		
+						
 		$check = $this->conn->query("SELECT * from pemasukan WHERE noreferensi = '$noreferensi'")->num_rows;
 		
 		if($this->capture_err())
 			return $this->capture_err();
-		
-			
+					
 		if(empty($id)){			
 			
-
 			$sql = "INSERT INTO `pemasukan` set noreferensi = '$noreferensi' , tanggalpemasukan = '$tanggalpemasukan' , amount = '$amount' , keteranganmasuk ='$keteranganmasuk'";
-			$save = $this->conn->query($sql);
-		
-
-				
+			$save = $this->conn->query($sql);	
 		}
+
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
@@ -357,8 +346,6 @@ Class Master extends DBConnection {
 		$amount = $_POST['amount_pengeluaran'];
 		$keterangankeluar = $_POST['keterangankeluar'];
 		
-		
-		
 		$check = $this->conn->query("SELECT * from pengeluaran WHERE noreferensi_pengeluaran = '$noreferensi'")->num_rows;
 		
 		if($this->capture_err())
@@ -366,14 +353,10 @@ Class Master extends DBConnection {
 		
 			
 		if(empty($id)){			
-			
-
 			$sql = "INSERT INTO `pengeluaran` set noreferensi_pengeluaran = '$noreferensi' , tanggal_pengeluaran = '$tanggal_pengeluaran' , amount_pengeluaran = '$amount' , keterangankeluar ='$keterangankeluar'";
 			$save = $this->conn->query($sql);
-		
-
-				
 		}
+		
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
@@ -399,9 +382,67 @@ Class Master extends DBConnection {
 		return json_encode($resp);
 
 	}
+	
 
 
+	function save_jasa(){
+		
+		extract($_POST);
+		$id = $_POST['id'];		
+		$namajasa = $_POST['namajasa'];
+		$hargajasa = $_POST['hargajasa'];
+		$keteranganjasa = $_POST['keteranganjasa'];		
+		
+		$check = $this->conn->query("SELECT * from jasa WHERE namajasa = '$namajasa'")->num_rows;
+		
+		if($this->capture_err())
+			return $this->capture_err();
+		
 
+		if(empty($id)){
+			
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Data jasa ini sudah ada.";
+				return json_encode($resp);
+				exit;
+			}
+
+			$sql = "INSERT INTO `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa'";
+			$save = $this->conn->query($sql);
+		}else{
+
+					
+			$sql = "UPDATE `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa' where idjasa = '{$id}' ";
+			$save = $this->conn->query($sql);
+		
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data jasa berhasil disimpan.");
+			else
+				$this->settings->set_flashdata('success',"Data jasa berhasil diperbarui.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function delete_jasa(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `jasa` where idjasa = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Data jasa berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
 	
 
 	function save_po(){
@@ -914,14 +955,20 @@ switch ($action) {
 	break;
 	case 'delete_pemasukan':
 		echo $Master->delete_pemasukan();
-	break;
-	break;
+	break;	
 	case 'save_pengeluaran':
 		echo $Master->save_pengeluaran();
 	break;
 	case 'delete_pengeluaran':
 		echo $Master->delete_pengeluaran();
 	break;
+	case 'save_jasa':
+		echo $Master->save_jasa();
+	break;
+	case 'delete_jasa':
+		echo $Master->delete_jasa();
+	break;
+	
 
 
 	// case 'get_item':

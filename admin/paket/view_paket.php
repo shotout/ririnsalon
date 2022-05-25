@@ -1,6 +1,6 @@
 <?php require_once('./../../config.php') ?>
 <?php 
- $qry = $conn->query("SELECT * from pemasukan where idpemasukan = '{$_GET['id']}' ");
+ $qry = $conn->query("SELECT * from jasa where idjasa = '{$_GET['id']}' ");
  if($qry->num_rows > 0){
      foreach($qry->fetch_assoc() as $k => $v){
          $$k=$v;
@@ -19,20 +19,16 @@
                 <div class="col-12">
                     
                     <dl>
-                        <dt class="text-info">No Referensi</dt>
-                        <dd class="pl-3"><?php echo $noreferensi ?></dd>
-
-                        <dt class="text-info">Tanggal Pemasukan</dt>
-                        <dd class="pl-3"><?php echo isset($tanggalpemasukan) ? date('d M Y', strtotime($tanggalpemasukan)) : '' ?></dd>
-
-                        <dt class="text-info">Amount</dt>
-                        <dd class="pl-3"><?php echo isset($amount) ? "Rp " . number_format($amount,0) : '' ?></dd>
-
-                        <dt class="text-info">Keterangan</dt>
-                        <dd class="pl-3"><?php echo isset($keteranganmasuk) ? $keteranganmasuk : '' ?></dd>                                             
                         
+                    
+                        <dt class="text-info">Nama Jasa</dt>
+                        <dd class="pl-3"><?php echo $namajasa ?></dd>
 
-                        
+                        <dt class="text-info">Harga</dt>
+                        <dd class="pl-3"><?php echo isset($hargajasa) ? "Rp " . number_format($hargajasa,0) : '' ?></dd>
+
+                        <dt class="text-info">Keterangan Jasa</dt>
+                        <dd class="pl-3"><?php echo isset($keteranganjasa) ? $keteranganjasa : '' ?></dd>                                               
                     </dl>
                 </div>
             </fieldset>

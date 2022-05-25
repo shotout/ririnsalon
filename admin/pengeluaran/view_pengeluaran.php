@@ -19,16 +19,16 @@
                 <div class="col-12">
                     
                     <dl>
-                        <dt class="text-info">No Referensi:</dt>
+                        <dt class="text-info">No Referensi</dt>
                         <dd class="pl-3"><?php echo $noreferensi_pengeluaran ?></dd>
 
-                        <dt class="text-info">Tanggal Pengeluaran:</dt>
+                        <dt class="text-info">Tanggal Pengeluaran</dt>
                         <dd class="pl-3"><?php echo isset($tanggal_pengeluaran) ? date('d M Y', strtotime($tanggal_pengeluaran)) : '' ?></dd>
 
-                        <dt class="text-info">Amount:</dt>
+                        <dt class="text-info">Amount</dt>
                         <dd class="pl-3"><?php echo isset($amount_pengeluaran) ? "Rp " . number_format($amount_pengeluaran,0) : '' ?></dd>
 
-                        <dt class="text-info">Keterangan:</dt>
+                        <dt class="text-info">Keterangan</dt>
                         <dd class="pl-3"><?php echo isset($keterangankeluar) ? $keterangankeluar : '' ?></dd>                                             
                         
 
