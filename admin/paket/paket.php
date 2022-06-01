@@ -2,7 +2,7 @@
 	<div class="card-header">
 		<h3 class="card-title">Daftar Paket</h3>
 		<div class="card-tools">
-			<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Paket</a>
+			<a href="<?php echo base_url ?>admin/?page=paket/manage_paket" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Paket</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -19,7 +19,7 @@
 				<thead>
 					<tr>
 						<!-- <th>ID</th>						 -->
-						<th>Jasa</th>						
+						<th>Paket</th>						
 						<th>Harga</th>
                         
 						<th>Action</th>
@@ -28,14 +28,14 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * from jasa order by idjasa asc ");
+						$qry = $conn->query("SELECT * from paket group by idpaket asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
                             <!-- <td><?php echo $row['id'] ?></td>	 -->
-                            <td><?php echo $row['namajasa'] ?></td>                            
-                            <td><?php echo $row['hargajasa'] ? "Rp " . number_format($row['hargajasa'],0) : '' ?></td>	
+                            <td><?php echo $row['namapaket'] ?></td>                            
+                            <td><?php echo $row['hargapaket'] ? "Rp " . number_format($row['hargapaket'],0) : '' ?></td>	
                             
 													
 							
@@ -46,11 +46,11 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idjasa'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['idjasa'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idjasa'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
 							</td>
 						</tr>
@@ -64,16 +64,16 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Yakin ingin menghapus jasa ini?","delete_category",[$(this).attr('data-id')])
+			_conf("Yakin ingin menghapus paket ini?","delete_category",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Tambah Jasa","jasa/manage_jasa.php","mid-large")
+			uni_modal("<i class='fa fa-plus'></i> Tambah Jasa","paket/manage_paket.php","mid-large")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Jasa","jasa/manage_jasa.php?id="+$(this).attr('data-id'),"mid-large")
+			uni_modal("<i class='fa fa-edit'></i> Edit Jasa","paket/manage_paket.php?id="+$(this).attr('data-id'),"mid-large")
 		})
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-box'></i> Detail Jasa","jasa/view_jasa.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-box'></i> Detail Jasa","paket/view_paket.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();
@@ -81,7 +81,7 @@
 	function delete_category($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_jasa",
+			url:_base_url_+"classes/Master.php?f=delete_paket",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

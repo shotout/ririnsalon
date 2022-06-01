@@ -42,7 +42,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="<?php echo base_url ?>admin/?page=pemasukan/pemasukan" class="nav-link nav-purchase_order">
+                      <a href="<?php echo base_url ?>admin/?page=paket/paket" class="nav-link nav-purchase_order">
                         <i class="nav-icon fas fa-spa"></i>
                         <p>
                           Paket

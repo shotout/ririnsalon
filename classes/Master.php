@@ -445,6 +445,67 @@ Class Master extends DBConnection {
 	}
 	
 
+	function save_paket(){
+		
+		extract($_POST);
+		$id = $_POST['id'];		
+		$namajasa = $_POST['namajasa'];
+		$hargajasa = $_POST['hargajasa'];
+		$keteranganjasa = $_POST['keteranganjasa'];		
+		
+		$check = $this->conn->query("SELECT * from jasa WHERE namajasa = '$namajasa'")->num_rows;
+		
+		if($this->capture_err())
+			return $this->capture_err();
+		
+
+		if(empty($id)){
+			
+			if($check > 0){
+				$resp['status'] = 'failed';
+				$resp['msg'] = "Data jasa ini sudah ada.";
+				return json_encode($resp);
+				exit;
+			}
+
+			$sql = "INSERT INTO `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa'";
+			$save = $this->conn->query($sql);
+		}else{
+
+					
+			$sql = "UPDATE `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa' where idjasa = '{$id}' ";
+			$save = $this->conn->query($sql);
+		
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data paket berhasil disimpan.");
+			else
+				$this->settings->set_flashdata('success',"Data paket berhasil diperbarui.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+
+	function delete_paket(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `jasa` where idjasa = '{$id}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"Data paket berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+
+
+
 	function save_po(){
 		if(empty($_POST['id'])){
 			$prefix = "PO";
@@ -968,7 +1029,12 @@ switch ($action) {
 	case 'delete_jasa':
 		echo $Master->delete_jasa();
 	break;
-	
+	case 'save_paket':
+		echo $Master->save_jasa();
+	break;
+	case 'delete_paket':
+		echo $Master->delete_jasa();
+	break;
 
 
 	// case 'get_item':
