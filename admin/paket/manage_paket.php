@@ -53,8 +53,9 @@ if(isset($_GET['id'])){
                                 
                                 // $harga_arr = $row['hargajasa'];                             
                             ?>
-                            <option value="<?php echo $row['idjasa'] ?>" <?php echo isset($idjasa) && $idjasa == $row['idjasa'] ? "selected" : "" ?> ><?php echo $row['namajasa'] ?></option>
+                            <option value="<?php echo $row['idjasa'].'-'.$row['hargajasa'].'-'.$row['namajasa'] ?>" <?php echo isset($idjasa) && $idjasa == $row['idjasa'] ? "selected" : "" ?> ><?php echo $row['namajasa'] ?></option>
 							
+                            
                             
 
                             <?php endwhile; ?>
@@ -168,8 +169,8 @@ if(isset($_GET['id'])){
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="remarks" class="text-info control-label">Remarks</label>
-                            <textarea name="remarks" id="remarks" rows="3" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
+                            <label for="keteranganpaket" class="text-info control-label">Keterangan</label>
+                            <textarea name="keteranganpaket" id="keteranganpaket" rows="3" class="form-control rounded-0"><?php echo isset($keteranganpaket) ? $keteranganpaket : '' ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -186,9 +187,9 @@ if(isset($_GET['id'])){
         <td class="py-1 px-2 text-center">
             <button class="btn btn-outline-danger btn-sm rem_row" type="button"><i class="fa fa-times"></i></button>
         </td>
-        <td class="py-1 px-2 text-center jasa">
+        <td class="py-1 px-2 text-center namajasa">
         <span class="visible"></span>
-            <input type="hidden" name="jasa[]">
+            <input type="hidden" name="idjasa[]">
             <input type="hidden" name="hargajasa[]">
             <input type="hidden" name="jumlah[]">            
             <input type="hidden" name="total[]">
@@ -209,9 +210,10 @@ if(isset($_GET['id'])){
    
 
     $('#idjasa').change(function(){
-             tes = $('#idjasa').val();
-		// $('#text_id_karyawan').text(tes);
-        $("#hargajasa").val(tes);
+        jasa = $('#idjasa').val();
+        hargajasa = jasa.split("-");
+
+        $("#hargajasa").val(hargajasa[1]);
         })
 
     $(function(){
@@ -225,12 +227,16 @@ if(isset($_GET['id'])){
 	})
 
         $('#add_to_list').click(function(){
-            var idjasa = $('#idjasa').val()
-            var hargajasa = $('#hargajasa').val()
+            jasa = $('#idjasa').val();
+            hargajasa = jasa.split("-");          
+                        
+            var idjasa = hargajasa[0];
+            var namajasa = hargajasa[2];
+            var harga = hargajasa[1];
            
             var jumlah = $('#jumlah').val()
             // var price = costs[item] || 0
-            var total = parseFloat(hargajasa)*parseFloat(jumlah)
+            var total = parseFloat(harga)*parseFloat(jumlah)
             // console.log(supplier,item)
             // var item_name = items[supplier][item].name || 'N/A';
             // var item_description = items[supplier][item].description || 'N/A';
@@ -244,30 +250,36 @@ if(isset($_GET['id'])){
             //     return false;
             // }
             tr.find('[name="idjasa[]"]').val(idjasa)
-            tr.find('[name="hargajasa[]"]').val(hargajasa)
+            tr.find('[name="namajasa[]"]').val(namajasa)
+            tr.find('[name="hargajasa[]"]').val(harga)
             tr.find('[name="jumlah[]"]').val(jumlah)
             tr.find('[name="total[]"]').val(total)
             // tr.find('[name="price[]"]').val(price)
             // tr.find('[name="total[]"]').val(total)
             // tr.attr('data-id',item)
-            tr.find('.jasa .visible').text(idjasa)
-            tr.find('.hargajasa .visible').text(hargajasa)
+            tr.find('.namajasa .visible').text(namajasa)
+            // tr.find('.hargajasa .visible').text(harga)
             tr.find('.jumlah').text(jumlah)
             // tr.find('.item').html(item_name+'<br/>'+item_description)
-            // tr.find('.cost').text(parseFloat(price).toLocaleString('en-US'))
+            tr.find('.hargajasa').text(parseFloat(harga).toLocaleString('en-US'))
             tr.find('.total').text(parseFloat(total).toLocaleString('en-US'))
             $('table#list tbody').append(tr)
-            // calc()
-            // $('#item_id').val('').trigger('change')
-            // $('#qty').val('')
-            // $('#unit').val('')
+            calc()
+            $('#idjasa').val('')
+            $('#hargajasa').val('')
+            $('#jumlah').val('')
+
+            $('#idjasa').select2({
+            placeholder:"Silakan pilih jasa",
+            
+        })     
             tr.find('.rem_row').click(function(){
                 rem($(this))
             })
             
-            // $('[name="discount_perc"],[name="tax_perc"]').on('input',function(){
-            //     calc()
-            // })
+            $('[name="discount_perc"],[name="tax_perc"]').on('input',function(){
+                calc()
+            })
             // $('#supplier_id').attr('readonly','readonly')
         })
         $('#po-form').submit(function(e){
@@ -321,7 +333,7 @@ if(isset($_GET['id'])){
         _this.closest('tr').remove()
         calc()
         if($('table#list tbody tr').length <= 0)
-            $('#supplier_id').removeAttr('readonly')
+            $('#idjasa').removeAttr('readonly')
 
     }
     function calc(){
