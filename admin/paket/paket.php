@@ -1,6 +1,6 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Daftar Paket</h3>
+		<h3 class="card-title">Daftar Paket	Perawatan</h3>
 		<div class="card-tools">
 			<a href="<?php echo base_url ?>admin/?page=paket/manage_paket" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Paket</a>
 		</div>
@@ -28,12 +28,12 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT * from paket group by idpaket asc ");
+						$qry = $conn->query("SELECT * from paket order by idpaket asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
-                            <!-- <td><?php echo $row['id'] ?></td>	 -->
+                            <!-- <td><?php echo $row['idpaket'] ?></td>	 -->
                             <td><?php echo $row['namapaket'] ?></td>                            
                             <td><?php echo $row['hargapaket'] ? "Rp " . number_format($row['hargapaket'],0) : '' ?></td>	
                             
@@ -48,7 +48,7 @@
 				                  <div class="dropdown-menu" role="menu">
 				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <a class="dropdown-item edit_data" href="<?php echo base_url.'admin?page=paket/manage_paket&id='.$row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
@@ -69,9 +69,7 @@
 		$('#create_new').click(function(){
 			uni_modal("<i class='fa fa-plus'></i> Tambah Jasa","paket/manage_paket.php","mid-large")
 		})
-		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Jasa","paket/manage_paket.php?id="+$(this).attr('data-id'),"mid-large")
-		})
+		
 		$('.view_data').click(function(){
 			uni_modal("<i class='fa fa-box'></i> Detail Jasa","paket/view_paket.php?id="+$(this).attr('data-id'),"")
 		})

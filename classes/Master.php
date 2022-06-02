@@ -442,68 +442,87 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 
-	}
+	}	
+
 	
-
 	function save_paket(){
-		
 		extract($_POST);
-		$id = $_POST['id'];		
-		$namajasa = $_POST['namajasa'];
-		$hargajasa = $_POST['hargajasa'];
-		$keteranganjasa = $_POST['keteranganjasa'];		
+		$idjasa = $_POST['idjasa'];
+		$id = $_POST['idpaket'];	 
 		
-		$check = $this->conn->query("SELECT * from jasa WHERE namajasa = '$namajasa'")->num_rows;
-		
-		if($this->capture_err())
-			return $this->capture_err();
-		
-
-		if(empty($id)){
-			
-			if($check > 0){
-				$resp['status'] = 'failed';
-				$resp['msg'] = "Data jasa ini sudah ada.";
-				return json_encode($resp);
-				exit;
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
+				if(!is_numeric($v))
+				$v= $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=", ";
+				$data .=" `{$k}` = '{$v}' ";
 			}
-
-			$sql = "INSERT INTO `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa'";
-			$save = $this->conn->query($sql);
-		}else{
-
-					
-			$sql = "UPDATE `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa' where idjasa = '{$id}' ";
-			$save = $this->conn->query($sql);
-		
 		}
+		if(empty($id)){
+			$sql = "INSERT INTO `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', pajak = '$pajak' , pajak_perc = '$pajak_perc',  keteranganpaket = '$keteranganpaket'";
+		}else{
+			$sql = "UPDATE `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', pajak = '$pajak' , pajak_perc = '$pajak_perc',  keteranganpaket = '$keteranganpaket' where idpaket = '{$id}'";
+		}
+		$save = $this->conn->query($sql);
 		if($save){
 			$resp['status'] = 'success';
 			if(empty($id))
-				$this->settings->set_flashdata('success',"Data paket berhasil disimpan.");
+			$idpaket = $this->conn->insert_id;
 			else
-				$this->settings->set_flashdata('success',"Data paket berhasil diperbarui.");
+			$idpaket = $id;       
+       		
+			$resp['id'] = $idpaket;
+			$data = "";
+			foreach($idjasa as $k =>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$idpaket}','{$v}','{$jumlah[$k]}','{$total[$k]}')";
+				
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `paket_item` where idpaket = '{$idpaket}'");
+				$save = $this->conn->query("INSERT INTO `paket_item` (`idpaket`,`idjasa`,`jumlah`,`subtotal`) VALUES {$data}");
+				if(!$save){
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$this->conn->query("DELETE FROM `paket` where idpaket '{$idpaket}'");
+					}
+					$resp['msg'] = 'PO has failed to save. Error: '.$this->conn->error;
+					$resp['sql'] = "INSERT INTO `paket_item` (`idpaket`,`idjasa`,`jumlah`,`subtotal`) VALUES {$data}";
+				}
+			}
 		}else{
 			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error."[{$sql}]";
+			$resp['msg'] = 'An error occured. Error: '.$this->conn->error;
 		}
+		if($resp['status'] == 'success'){
+			if(empty($id)){
+				$this->settings->set_flashdata('success'," Paket perawatan baru berhasil dibuat.");
+			}else{
+				$this->settings->set_flashdata('success'," Paket perawatan berhasil diperbaharui.");
+			}
+		}
+
 		return json_encode($resp);
 	}
 
+
 	function delete_paket(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `jasa` where idjasa = '{$id}'");
-		if($del){
+		$sql = "DELETE FROM `paket_item` where idpaket = '{$id}'";
+		$delete_item = $this->conn->query($sql);
+
+		if($delete_item){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"Data paket berhasil dihapus.");
+			$sql1 = "DELETE FROM `paket` where idpaket = '{$id}'";
+			$delete = $this->conn->query($sql1);
+			$this->settings->set_flashdata('success',"Data berhasil dihapus.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
 		}
 		return json_encode($resp);
-
 	}
-
 
 
 	function save_po(){
@@ -1030,10 +1049,10 @@ switch ($action) {
 		echo $Master->delete_jasa();
 	break;
 	case 'save_paket':
-		echo $Master->save_jasa();
+		echo $Master->save_paket();
 	break;
 	case 'delete_paket':
-		echo $Master->delete_jasa();
+		echo $Master->delete_paket();
 	break;
 
 

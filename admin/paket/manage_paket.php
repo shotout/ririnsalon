@@ -1,6 +1,6 @@
 <?php 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,jumlah,subtotal,hargapaket,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket ='{$_GET['id']}'");
+    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket ='{$_GET['id']}'");
     if($qry->num_rows >0){
         foreach($qry->fetch_array() as $k => $v){
             $$k = $v;
@@ -23,16 +23,16 @@ if(isset($_GET['id'])){
 </style>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h4 class="card-title"><?php echo isset($namapaket) ? "Edit data paket - ".$namapaket : 'Tambah data paket' ?></h4>
+        <h4 class="card-title"><?php echo isset($namapaket) ? "Edit paket perawatan - ".$namapaket : 'Tambah paket perawatan' ?></h4>
     </div>
     <div class="card-body">
-        <form action="" id="po-form">
+        <form action="" id="paket-form">
             <input type="hidden" name="idpaket" value="<?php echo isset($idpaket) ? $idpaket : '' ?>">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-5">
                     <legend class="text-info">Nama Paket</legend>
-                        <input type="text" class="form-control form-control-sm rounded-0" value="<?php echo isset($namapaket) ? $namapaket : '' ?>" >
+                        <input type="text" class="form-control form-control-sm rounded-0" name="namapaket" id="namapaket" value="<?php echo isset($namapaket) ? $namapaket : '' ?>" >
                     </div>
                     
                 </div>
@@ -50,15 +50,8 @@ if(isset($_GET['id'])){
                             							
                             $jasa = $conn->query("SELECT * FROM `jasa` order by `namajasa` asc");
                             while($row=$jasa->fetch_assoc()):  
-                                
-                                // $harga_arr = $row['hargajasa'];                             
                             ?>
-                            <option value="<?php echo $row['idjasa'].'-'.$row['hargajasa'].'-'.$row['namajasa'] ?>" <?php echo isset($idjasa) && $idjasa == $row['idjasa'] ? "selected" : "" ?> ><?php echo $row['namajasa'] ?></option>
-							
-                            
-                            
-
-                            <?php endwhile; ?>
+                            <option value="<?php echo $row['idjasa'].'-'.$row['hargajasa'].'-'.$row['namajasa'] ?>" <?php echo isset($idjasa) && $idjasa == $row['idjasa'] ? "selected" : "" ?> ><?php echo $row['namajasa'] ?></option>					   <?php endwhile; ?>
 							
                             </select>
                             </div>
@@ -85,82 +78,80 @@ if(isset($_GET['id'])){
                 <hr>
                 <table class="table table-striped table-bordered" id="list">
                     <colgroup>
-                        <col width="5%">
-                        <!-- <col width="10%"> -->
+                        <col width="5%">                       
                         <col width="35%">
                         <col width="25%">
-                        <col width="5%">
-                        
-                        
+                        <col width="5%">                                                
                     </colgroup>
                     <thead>
                         <tr class="text-light bg-navy">
                             <th class="text-center py-1 px-2"></th>
                             <th class="text-center py-1 px-2">Jasa</th>
                             <th class="text-center py-1 px-2">Harga</th>
-                            <th class="text-center py-1 px-2" colspan="2">Jumlah</th>
-                            
-                            
+                            <th class="text-center py-1 px-2" colspan="2">Jumlah</th>                     
                             <th class="text-center py-1 px-2">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $total = 0;
-                        if(isset($id)):
-                        $qry = $conn->query("SELECT p.*,i.name,i.description FROM `po_items` p inner join item_list i on p.item_id = i.id where p.po_id = '{$id}'");
+                        
+                        if(isset($idpaket)):
+                        $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
                         while($row = $qry->fetch_assoc()):
-                            $total += $row['total']
+                            $total += $row['hargapaket']
                         ?>
                         <tr>
                             <td class="py-1 px-2 text-center">
                                 <button class="btn btn-outline-danger btn-sm rem_row" type="button"><i class="fa fa-times"></i></button>
                             </td>
-                            <!-- <td class="py-1 px-2 text-center qty">
-                                <span class="visible"><?php echo number_format($row['quantity']); ?></span>
-                                <input type="hidden" name="item_id[]" value="<?php echo $row['item_id']; ?>">
-                                <input type="hidden" name="unit[]" value="<?php echo $row['unit']; ?>">
-                                <input type="hidden" name="qty[]" value="<?php echo $row['quantity']; ?>">
-                                <input type="hidden" name="price[]" value="<?php echo $row['price']; ?>">
-                                <input type="hidden" name="total[]" value="<?php echo $row['total']; ?>">
+                            
+                            <td class="py-1 px-2 text-center namajasa">
+                            <span class="visible"><?php echo $row['namajasa']; ?></span>
+                                <input type="hidden" name="idjasa[]" value="<?php echo $row['idjasa']; ?>">
+                                <input type="hidden" name="hargajasa[]" value="<?php echo $row['hargajasa']; ?>">
+                                <input type="hidden" name="jumlah[]" value="<?php echo $row['jumlah']; ?>">
+                                <input type="hidden" name="total[]" value="<?php echo $row['subtotal']; ?>">
                             </td>
-                            <td class="py-1 px-2 text-center unit">
-                            <?php echo $row['unit']; ?>
+
+                            <td class="py-1 px-2 text-center hargajasa">
+                            <?php echo $row['hargajasa']; ?>
                             </td>
-                            <td class="py-1 px-2 item">
-                            <?php echo $row['name']; ?> <br>
-                            <?php echo $row['description']; ?>
+
+                            <td class="py-1 px-2 text-center jumlah" colspan="2">
+                            <?php echo $row['jumlah']; ?>           
                             </td>
-                            <td class="py-1 px-2 text-right cost">
-                            <?php echo number_format($row['price']); ?>
+        
+                            <td class="py-1 px-2 text-right total" >
+                            <?php echo $row['subtotal']; ?>
                             </td>
-                            <td class="py-1 px-2 text-right total">
-                            <?php echo number_format($row['total']); ?>
-                            </td> -->
+
+
                         </tr>
                         <?php endwhile; ?>
                         <?php endif; ?>
                     </tbody>
+
                     <tfoot>
                         <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Sub Total</th>
+                            <th class="text-right py-1 px-2" colspan="5">Sub Total Harga Paket</th>
                             <th class="text-right py-1 px-2 sub-total">0</th>
                         </tr>
                         <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Discount <input style="width:40px !important" name="discount_perc" class='' type="number" min="0" max="100" value="<?php echo isset($discount_perc) ? $discount_perc : 0 ?>">%
-                                <input type="hidden" name="discount" value="<?php echo isset($discount) ? $discount : 0 ?>">
+                            <th class="text-right py-1 px-2" colspan="5">Discount <input style="width:40px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="100" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">%
+                                <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
                             </th>
-                            <th class="text-right py-1 px-2 discount"><?php echo isset($discount) ? number_format($discount) : 0 ?></th>
+                            <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
                         </tr>
                         <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Tax <input style="width:40px !important" name="tax_perc" class='' type="number" min="0" max="100" value="<?php echo isset($tax_perc) ? $tax_perc : 0 ?>">%
-                                <input type="hidden" name="tax" value="<?php echo isset($discount) ? $discount : 0 ?>">
+                            <th class="text-right py-1 px-2" colspan="5">Pajak <input style="width:40px !important" id="pajak_perc" name="pajak_perc" class='' type="number" min="0" max="100" value="<?php echo isset($pajak_perc) ? $pajak_perc : 0 ?>">%
+                                <input type="hidden" name="pajak" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
                             </th>
-                            <th class="text-right py-1 px-2 tax"><?php echo isset($tax) ? number_format($tax) : 0 ?></th>
+                            <th class="text-right py-1 px-2 pajak"><?php echo isset($pajak) ? number_format($pajak) : 0 ?></th>
                         </tr>
                         <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Total
-                                <input type="hidden" name="amount" value="<?php echo isset($discount) ? $discount : 0 ?>">
+                            <th class="text-right py-1 px-2" colspan="5">Total Harga Paket
+                                <input type="hidden" name="amount" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
                             </th>
                             <th class="text-right py-1 px-2 grand-total">0</th>
                         </tr>
@@ -178,8 +169,8 @@ if(isset($_GET['id'])){
         </form>
     </div>
     <div class="card-footer py-1 text-center">
-        <button class="btn btn-flat btn-primary" type="submit" form="po-form">Save</button>
-        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=purchase_order' ?>">Cancel</a>
+        <button class="btn btn-flat btn-primary" type="submit" form="paket-form">Save</button>
+        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=paket/paket' ?>">Cancel</a>
     </div>
 </div>
 <table id="clone_list" class="d-none">
@@ -199,8 +190,7 @@ if(isset($_GET['id'])){
         <td class="py-1 px-2 text-center jumlah" colspan="2">
             
         </td>
-        <!-- <td class="py-1 px-2 text-right total">asdas1
-        </td> -->
+        
         <td class="py-1 px-2 text-right total" >
         </td>
     </tr>
@@ -208,12 +198,20 @@ if(isset($_GET['id'])){
 <script>
    
    
+   $('#disk_perc').change(function(){
+        calc();
+        })
+
+    $('#pajak_perc').change(function(){
+        calc();
+        })
 
     $('#idjasa').change(function(){
         jasa = $('#idjasa').val();
         hargajasa = jasa.split("-");
 
         $("#hargajasa").val(hargajasa[1]);
+        $('#hargajasa').attr('readonly','readonly')
         })
 
     $(function(){
@@ -235,6 +233,7 @@ if(isset($_GET['id'])){
             var harga = hargajasa[1];
            
             var jumlah = $('#jumlah').val()
+            
             // var price = costs[item] || 0
             var total = parseFloat(harga)*parseFloat(jumlah)
             // console.log(supplier,item)
@@ -242,7 +241,7 @@ if(isset($_GET['id'])){
             // var item_description = items[supplier][item].description || 'N/A';
             var tr = $('#clone_list tr').clone()
             if(jumlah == '' ){
-                alert_toast('Form Item textfields are required.','warning');
+                alert_toast('Jumlah tidak boleh kosong.','warning');
                 return false;
             }
             // if($('table#list tbody').find('tr[data-id="'+item+'"]').length > 0){
@@ -277,18 +276,18 @@ if(isset($_GET['id'])){
                 rem($(this))
             })
             
-            $('[name="discount_perc"],[name="tax_perc"]').on('input',function(){
+            $('[name="disk_perc"],[name="pajak_perc"]').on('input',function(){
                 calc()
             })
             // $('#supplier_id').attr('readonly','readonly')
         })
-        $('#po-form').submit(function(e){
+        $('#paket-form').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
 			 $('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_po",
+				url:_base_url_+"classes/Master.php?f=save_paket",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -303,7 +302,7 @@ if(isset($_GET['id'])){
 				},
 				success:function(resp){
 					if(resp.status == 'success'){
-						location.replace(_base_url_+"admin/?page=purchase_order/view_po&id="+resp.id);
+						location.replace(_base_url_+"admin/?page=paket/paket");
 					}else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -320,10 +319,10 @@ if(isset($_GET['id'])){
 			})
 		})
 
-        if('<?php echo isset($id) && $id > 0 ?>' == 1){
+        if('<?php echo isset($idpaket) && $idpaket > 0 ?>' == 1){
             calc()
-            $('#supplier_id').trigger('change')
-            $('#supplier_id').attr('readonly','readonly')
+            // $('#supplier_id').trigger('change')
+            // $('#supplier_id').attr('readonly','readonly')
             $('table#list tbody tr .rem_row').click(function(){
                 rem($(this))
             })
@@ -339,21 +338,21 @@ if(isset($_GET['id'])){
     function calc(){
         var sub_total = 0;
         var grand_total = 0;
-        var discount = 0;
-        var tax = 0;
+        var diskon = 0;
+        var pajak = 0;
         $('table#list tbody input[name="total[]"]').each(function(){
             sub_total += parseFloat($(this).val())
             
         })
         $('table#list tfoot .sub-total').text(parseFloat(sub_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-        var discount =   sub_total * (parseFloat($('[name="discount_perc"]').val()) /100)
-        sub_total = sub_total - discount;
-        var tax =   sub_total * (parseFloat($('[name="tax_perc"]').val()) /100)
-        grand_total = sub_total + tax
-        $('.discount').text(parseFloat(discount).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-        $('[name="discount"]').val(parseFloat(discount))
-        $('.tax').text(parseFloat(tax).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-        $('[name="tax"]').val(parseFloat(tax))
+        var diskon =   sub_total * (parseFloat($('[name="disk_perc"]').val()) /100)
+        sub_total = sub_total - diskon;
+        var pajak =   sub_total * (parseFloat($('[name="pajak_perc"]').val()) /100)
+        grand_total = sub_total + pajak
+        $('.diskon').text(parseFloat(diskon).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="diskon"]').val(parseFloat(diskon))
+        $('.pajak').text(parseFloat(pajak).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="pajak"]').val(parseFloat(pajak))
         $('table#list tfoot .grand-total').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
         $('[name="amount"]').val(parseFloat(grand_total))
 
