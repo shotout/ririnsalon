@@ -106,7 +106,7 @@ if(isset($_GET['id'])){
                                 <button class="btn btn-outline-danger btn-sm rem_row" type="button"><i class="fa fa-times"></i></button>
                             </td>
                             
-                            <td class="py-1 px-2 text-center namajasa">
+                            <td class="py-1 px-2 text-left namajasa">
                             <span class="visible"><?php echo $row['namajasa']; ?></span>
                                 <input type="hidden" name="idjasa[]" value="<?php echo $row['idjasa']; ?>">
                                 <input type="hidden" name="hargajasa[]" value="<?php echo $row['hargajasa']; ?>">
@@ -115,7 +115,7 @@ if(isset($_GET['id'])){
                             </td>
 
                             <td class="py-1 px-2 text-center hargajasa">
-                            <?php echo $row['hargajasa']; ?>
+                            <?php echo number_format($row['hargajasa']); ?>
                             </td>
 
                             <td class="py-1 px-2 text-center jumlah" colspan="2">
@@ -123,7 +123,7 @@ if(isset($_GET['id'])){
                             </td>
         
                             <td class="py-1 px-2 text-right total" >
-                            <?php echo $row['subtotal']; ?>
+                            <?php echo number_format($row['subtotal']); ?>
                             </td>
 
 
@@ -302,7 +302,7 @@ if(isset($_GET['id'])){
 				},
 				success:function(resp){
 					if(resp.status == 'success'){
-						location.replace(_base_url_+"admin/?page=paket/paket");
+						location.replace(_base_url_+"admin/?page=paket/view_paket&id="+resp.id);
 					}else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -349,11 +349,11 @@ if(isset($_GET['id'])){
         sub_total = sub_total - diskon;
         var pajak =   sub_total * (parseFloat($('[name="pajak_perc"]').val()) /100)
         grand_total = sub_total + pajak
-        $('.diskon').text(parseFloat(diskon).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('.diskon').text(parseFloat(diskon).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
         $('[name="diskon"]').val(parseFloat(diskon))
-        $('.pajak').text(parseFloat(pajak).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('.pajak').text(parseFloat(pajak).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
         $('[name="pajak"]').val(parseFloat(pajak))
-        $('table#list tfoot .grand-total').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('table#list tfoot .grand-total').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
         $('[name="amount"]').val(parseFloat(grand_total))
 
     }

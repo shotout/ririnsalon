@@ -134,14 +134,14 @@
                       </a>
                     </li>
 
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=penggajian/penggajian" class="nav-link nav-sales">
                         <i class="nav-icon fas fa-dollar-sign"></i>
                         <p>
-                          Penggajian
+                          Gaji
                         </p>
                       </a>
-                    </li> -->
+                    </li>
 
                     <?php if($_settings->userdata('type') == 1): ?>
                     <li class="nav-header">Maintenance</li>

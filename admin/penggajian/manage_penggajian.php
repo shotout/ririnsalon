@@ -28,7 +28,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 </style>
 <div class="card card-outline card-primary">
-    <div class="card-header"></h4>
+    <div class="card-header">Gaji Karyawan</h4>
     </div>
     
     <div class="card-body">
@@ -36,63 +36,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <input type="hidden" name ="id" value="<?php echo isset($id_penggajian) ? $id_penggajian : '' ?>">            
                         
             <div class="container-fluid">
-            
-                <div class="row">
-
-                <div class="col-md-4">
-                        <label class="control-label text-info" >ID Karyawan</label>
-
-						<div class="row-md-1">
-						<input type="text" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>
-						</div>                       
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">                          
-                        
-                            <label for="karyawan" class="control-label text-info">Karyawan</label>
-                            
-                            <select name="nama_karyawan" id="nama_karyawan" class="custom-select select2">
-                                                        
-                            <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
-                            
-							<?php 
-                            $option="";
-                            
-                            $karyawan = $conn->query("SELECT id,nama,jabatan FROM karyawan ORDER BY id ASC");
-                            while($row=$karyawan->fetch_assoc()){
-                                
-                                $option .= '<option value="'.$row["id"].'">'.$row["nama"].'</option>';
-                                
-                            }  
-                             echo $option; 
-                                
-                            ?>                          						 
-                            </select>                           
-
-                        </div>
-                    </div>
-                     
-                    <div class="col-md-4">
-                        <label class="control-label text-info" >Jabatan</label>                     
-                                   
-						<div class="row-md-1">
-                        <?php 
-                                $id = array();
-                                $jbt = array();
-                                
-                                $sql = $conn->query("SELECT id,jabatan FROM karyawan where  id = '7' ");
-                                while($row=$sql->fetch_assoc()):
-                                    $id[$row['id']] = $row;
-                                    $jabatan[$row['id']] = $row['jabatan'];                                    
-                                endwhile;
-                            ?>           
-                        <input type="text" name = "jabatan" id = "jabatan" class="form-control rounded-0" readonly ?></input>
-						</div>                       
-                    </div>
-                    
-
-                    <div class="col-md-3">
+            <div class="col-md-3">
                         <div class="form-group">                          
                             
                             <label for="bulan" class="control-label text-info">Bulan</label>
@@ -139,7 +83,55 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             </select>                            
 
                         </div>
+                    </div></br>
+                <div class="column">               
+                        					
+						<input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>
+						                     
+                   
+
+                    <div class="col-md-5">
+                        <div class="form-group">                          
+                        
+                            <label for="karyawan" class="control-label text-info">Karyawan</label>
+                            
+                            <select name="nama_karyawan" id="nama_karyawan" class="custom-select select2">
+                                                        
+                            <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
+                                                       							
+                           	<?php 
+                            $karyawan = $conn->query("SELECT * FROM karyawan ORDER BY id ASC");
+                            while($row=$karyawan->fetch_assoc()):
+                            ?>
+
+                            <option value="<?php echo $row['id'].'-'.$row['nama'].'-'.$row['jabatan'].'-'.$row['gajipokok']?>" <?php echo isset($id) && $id == $row['id'] ? "selected" : "" ?> ><?php echo $row['nama'] ?></option>					   
+                            
+                            <?php endwhile; ?>                            
+                                                                                      						 
+                            </select>                           
+
+                        </div>
                     </div>
+                     
+                    <div class="col-md-4">
+                        <label class="control-label text-info">Jabatan</label>                     
+                                   
+						<div class="row-md-1">                                  
+                        <input type="text" name = "jabatan" id = "jabatan" class="form-control rounded-0" readonly ?>
+						</div>                       
+                    </div>
+
+                            </br>
+
+                    <div class="col-md-3">
+                        <label class="control-label text-info">Gaji Pokok</label>                     
+                                   
+						<div class="row-md-1">                                  
+                        <input type="text" name = "gapok" id = "gapok" class="form-control rounded-0" readonly ?>
+						</div>                       
+                    </div>
+
+                    
 
                 </div>
                 <hr>
@@ -205,20 +197,41 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 
 
 
-	$('#nama_karyawan').change(function(){
-		tes = $('#nama_karyawan').val();
+	$('#nama_karyawan').change(function(){       
+		karyawan = $('#nama_karyawan').val();
+        karyawanarray = karyawan.split("-");
 		// $('#text_id_karyawan').text(tes);
-        $("#text_id_karyawan").val(tes);
+        $("#text_id_karyawan").val(karyawanarray[0]);
+               
+        jbt = karyawanarray[2];
+        var gaji = karyawanarray[3]; 
+        var	number_string = gaji.toString(),
+	    sisa 	= number_string.length % 3,
+	    rupiah 	= number_string.substr(0, sisa),
+	    ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+		
+        if (ribuan) {
+	    separator = sisa ? '.' : '';
+	    rupiah += separator + ribuan.join('.');
+        }
+        
+         $("#gapok").val(rupiah);
+       
 
-        
-		jbt = $jabatan;
-		// $('#text_id_karyawan').text(tes);
-        $("#jabatan").val(jbt);     
-        
+        if (jbt == 1){
+            namajabatan = "Hairstylist";
+            $("#jabatan").val(namajabatan);
+        }else if(jbt == 2){
+            namajabatan = "Kasir";
+            $("#jabatan").val(namajabatan);
+        }else{
+            namajabatan = "Hairdresser";
+            $("#jabatan").val(namajabatan);
+        }
 	})
 
     
-	    $(function(){
+	$(function(){
         $('.select2').select2({
             placeholder:"Pilih karyawan",
             width:'resolve',

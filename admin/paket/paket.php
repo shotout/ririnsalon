@@ -46,7 +46,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+				                    <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=paket/view_paket&id='.$row['idpaket'] ?>" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item edit_data" href="<?php echo base_url.'admin?page=paket/manage_paket&id='.$row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
