@@ -1,9 +1,6 @@
 <?php
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT id_penggajian,jabatan,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian 
-    JOIN karyawan ON penggajian.id_karyawan = karyawan.id 
-    JOIN absensi ON penggajian.id_absensi = absensi.id
-    JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan WHERE id_penggajian = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT id_penggajian,jabatan,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian JOIN karyawan ON penggajian.id_karyawan = karyawan.id JOIN absensi ON penggajian.id_absensi = absensi.id JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan WHERE id_penggajian = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -34,10 +31,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     <div class="card-body">
         <form action="" id="penggajian-form"> 
         <input type="hidden" name ="id" value="<?php echo isset($id_penggajian) ? $id_penggajian : '' ?>">            
-                        
-            <div class="container-fluid">
+            <fieldset>           
+            <div class="container-fluid row">
             <div class="col-md-3">
-                        <div class="form-group">                          
+                        <!-- <div class="form-group">                          
                             
                             <label for="bulan" class="control-label text-info">Bulan</label>
                             <select  name = "bulan" id="bulan" class="custom-select select3">
@@ -82,14 +79,12 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                                 </select>                        
                             </select>                            
 
-                        </div>
-                    </div></br>
-                <div class="column">               
-                        					
-						<input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>
-						                     
-                   
+                        </div> -->
+                        
+                    </div>
 
+                    <input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>						                     
+                    
                     <div class="col-md-5">
                         <div class="form-group">                          
                         
@@ -100,11 +95,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
                                                        							
                            	<?php 
-                            $karyawan = $conn->query("SELECT * FROM karyawan ORDER BY id ASC");
+                            $karyawan = $conn->query("SELECT karyawan.`id`,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id WHERE bulan = MONTH(CURDATE()) ORDER BY karyawan.id ASC");
                             while($row=$karyawan->fetch_assoc()):
                             ?>
 
-                            <option value="<?php echo $row['id'].'-'.$row['nama'].'-'.$row['jabatan'].'-'.$row['gajipokok']?>" <?php echo isset($id) && $id == $row['id'] ? "selected" : "" ?> ><?php echo $row['nama'] ?></option>					   
+                            <option value="<?php echo $row['id'].'-'.$row['nama'].'-'.$row['jabatan'].'-'.$row['gajipokok'].'-'.$row['t_kesehatan'].'-'.$row['t_makan'].'-'.$row['t_makeup'].'-'.$row['t_transport'].'-'.$row['t_kasir'].'-'.$row['t_kerajinan'].'-'.$row['lembur']?>" <?php echo isset($id) && $id == $row['id'] ? "selected" : "" ?> ><?php echo $row['nama'] ?></option>					   
                             
                             <?php endwhile; ?>                            
                                                                                       						 
@@ -113,92 +108,141 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         </div>
                     </div>
                      
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label class="control-label text-info">Jabatan</label>                     
                                    
-						<div class="row-md-1">                                  
+						<div class="row-md-2">                                  
                         <input type="text" name = "jabatan" id = "jabatan" class="form-control rounded-0" readonly ?>
-						</div>                       
+						</div> 
+                                              
                     </div>
-
-                            </br>
-
-                    <div class="col-md-3">
-                        <label class="control-label text-info">Gaji Pokok</label>                     
-                                   
-						<div class="row-md-1">                                  
-                        <input type="text" name = "gapok" id = "gapok" class="form-control rounded-0" readonly ?>
-						</div>                       
-                    </div>
-
-                    
-
-                </div>
-                <hr>
-                <fieldset>
-                    
-                    <div class="row  align-items-end">
+                    <div class="col-md-2 text-center">
                             
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_kesehatan"  class="control-label">Kesehatan</label>
-                                <input type="number"  class="form-control rounded-0" id = "t_kesehatan" name = "t_kesehatan" value="<?php echo isset($t_kesehatan) ? $t_kesehatan : ''; ?>">
+                            <label class="control-label text-info"> <?php echo " &nbsp" ?></label>
+                            <div class="row-md-2">
+                                <button type="button" class="btn btn-primary" id="add_to_list"> Tambah ke list </button>
                             </div>
-                        </div>       
+                    </div>
                     
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_makan"  class="control-label">Makan</label>
-                                <input type="number"  class="form-control rounded-0" id = "t_makan" name = "t_makan" value="<?php echo isset($t_makan) ? $t_makan : ''; ?>">
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_makeup"  class="control-label">Make Up</label>
-                                <input type="number"  class="form-control rounded-0" id = "t_makeup" name = "t_makeup" value="<?php echo isset($t_makeup) ? $t_makeup : ''; ?>">
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_transport"  class="control-label">Transport</label>
-                                <input type="number"  class="form-control rounded-0" id = "t_transport" name = "t_transport" value="<?php echo isset($t_transport) ? $t_transport : ''; ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_kasir" class="control-label">Kasir</label>
-                                <input type="number" step="any" class="form-control rounded-0" id="t_kasir" name="t_kasir" value="<?php echo isset($t_kasir) ? $t_kasir : ''; ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="t_kerajinan" class="control-label">Kerajinan</label>
-                                <input type="number" step="any" class="form-control rounded-0" id="t_kerajinan" name="t_kerajinan" value="<?php echo isset($t_kerajinan) ? $t_kerajinan : ''; ?>">
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-2 text-center">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="add_to_list">Add to List</button>
-                            </div>
-                        </div> -->
-                </fieldset>
+                </br> 
+                </div>
+                
+                            </fieldset>
+                <hr>
+                <h4 class="text-info">Rincian Gaji</h4>
+            <table class="table table-striped table-bordered" id="list">
+                <colgroup>                                          
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="25%"> 
+                    
+                </colgroup>
+                <thead>
+                    <tr class="text-light bg-navy" style="font-size:10pt;">
+                    
+                            <th class="text-center py-1 px-2">Gaji Pokok</th>
+                            <th class="text-center py-1 px-2">T. Kesehatan</th>
+                            <th class="text-center py-1 px-2">T. Makan</th>                     
+                            <th class="text-center py-1 px-2">T. Make Up</th>
+                            <th class="text-center py-1 px-2">T. Transport</th>
+                            <th class="text-center py-1 px-2">T. Kasir</th>
+                            <th class="text-center py-1 px-2">T. Kerajinan</th>
+                            <th class="text-center py-1 px-2">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $total = 0;
+                        
+                    if(isset($id_karyawan)):
+                    $qry = $conn->query("SELECT karyawan.`id`,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id WHERE karyawan.id = '{$id_karyawan}' and bulan = '{$bulan}'");
+                    while($row = $qry->fetch_assoc()):
+                        // $total += $row['hargapaket']
+                    ?>
+                    <tr>        
+                    <td class="py-1 px-2 text-left gajipokok"></td>
+                    <td class="py-1 px-2 text-left t_kesehatan"></td>
+                    <td class="py-1 px-2 text-left t_makan"></td>
+                    <td class="py-1 px-2 text-left t_makeup"></td>
+                    <td class="py-1 px-2 text-left t_transport" ></td>
+                    <td class="py-1 px-2 text-left t_kasir"></td>
+                    <td class="py-1 px-2 text-left t_kerajinan"></td>
+                    <td class="py-1 px-2 text-right total"></td>           
+                    </tr>
+                    <?php endwhile; ?>
+                    <?php endif; ?>
+                    
+                </tbody>
+                <tfoot>                    
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Lembur <input style="width:40px " id="lemburhari" name="lemburhari" class='text-left'value="<?php echo isset($lembur) ? $lembur : 0 ?>" readonly> Hari
+                        
+                        <th class="text-right py-1 px-2 lembur"> 0 </th>
+                    </tr>
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Point <input style="width:60px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="500" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
+                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        </th>
+                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
+                    </tr>
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Sub Total</th>
+                        <th class="text-right py-1 px-2 sub-total"><?php echo number_format($total,0)  ?></th>
+                    </tr>
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Potongan Cashbon <input style="width:100px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="100" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
+                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        </th>
+                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
+                    </tr>
+                    <tr>
+                    <th class="text-right py-1 px-2" colspan="7">Potongan Lainnya <input style="width:100px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="100" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
+                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        </th>
+                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
+                    </tr>
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Total</th>
+                        <th class="text-right py-1 px-2 grand-total"><?php echo isset($hargapaket) ? number_format($hargapaket,0) : 0 ?></th>
+                    </tr>
+                    
+                </tfoot>
+            </table>
+                
                 <hr>
                 
-    <!-- <div class="card-footer py-1 text-center">
+    <div class="card-footer py-1 text-center">
         <button class="btn btn-flat btn-primary" type="submit" form="absensi-form">Save</button>
         <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=absensi/absensi' ?>">Cancel</a>
-    </div> -->
+    </div>
 </div>
+<table id="clone_list" class="d-none">
+    <tr>        
+    <td class="py-1 px-2 text-left gajipokok"></td>
+    <td class="py-1 px-2 text-left t_kesehatan"></td>
+    <td class="py-1 px-2 text-left t_makan"></td>
+    <td class="py-1 px-2 text-left t_makeup"></td>
+    <td class="py-1 px-2 text-left t_transport" ></td>
+    <td class="py-1 px-2 text-left t_kasir"></td>
+    <td class="py-1 px-2 text-left t_kerajinan"></td>
+    <td class="py-1 px-2 text-right total"></td>           
+    </tr>
+</table>
 
 <script>
 
 
+      
 
-
-	$('#nama_karyawan').change(function(){       
+	$('#nama_karyawan').change(function(){   
+        bulan = $('#bulan').val();    
 		karyawan = $('#nama_karyawan').val();
+        
         karyawanarray = karyawan.split("-");
 		// $('#text_id_karyawan').text(tes);
         $("#text_id_karyawan").val(karyawanarray[0]);
@@ -215,8 +259,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	    rupiah += separator + ribuan.join('.');
         }
         
-         $("#gapok").val(rupiah);
+         
        
+         if (bulan == ''){
+             tes="";
+            alert_toast(' Pilih bulan terlebih dahulu.','warning');
+            $("#nama_karyawan").val(tes);
+            return false;
+            
+        }
 
         if (jbt == 1){
             namajabatan = "Hairstylist";
@@ -228,6 +279,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             namajabatan = "Hairdresser";
             $("#jabatan").val(namajabatan);
         }
+
+        
+
 	})
 
     
@@ -286,13 +340,96 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			})
 		})
 
-        if('<?php echo isset($id_tunjangan) && $id_tunjangan > 0 ?>' == 1){
+        // if('<?php echo isset($id_tunjangan) && $id_tunjangan > 0 ?>' == 1){
             
-            $('#nama_karyawan').trigger('change')
-            $('#nama_karyawan').attr('readonly','readonly')
+        //     $('#nama_karyawan').trigger('change')
+        //     $('#nama_karyawan').attr('readonly','readonly')
             
-        }
+        // }
     // })
+
+    $('#add_to_list').click(function(){
+        
+        karyawan = $('#nama_karyawan').val();
+        
+        karyawanarray = karyawan.split("-");
+		
+        $("#text_id_karyawan").val(karyawanarray[0]);
+               
+        
+        var gaji = karyawanarray[3];
+        var tkesehatan = karyawanarray[4];
+        var tmakan = karyawanarray[5];
+        var tmakeup = karyawanarray[6];
+        var ttransport = karyawanarray[7];
+        var tkasir = karyawanarray[8];
+        var tkerajinan = karyawanarray[9];
+        var lemburhari = karyawanarray[10];
+        var total = parseInt(gaji)+parseInt(tkesehatan)+parseInt(tmakan)+parseInt(tmakeup)+parseInt(ttransport)+parseInt(tkasir)+parseInt(tkerajinan);
+
+        $("#lemburhari").val(karyawanarray[10]);
+
+
+
+        // var	number_string = gaji.toString(),
+	    // sisa 	= number_string.length % 3,
+	    // rupiah 	= number_string.substr(0, sisa),
+	    // ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+		
+        // if (ribuan) {
+	    // separator = sisa ? '.' : '';
+	    // rupiah += separator + ribuan.join('.');
+        // }
+                      
+                        
+            // var idjasa = hargajasa[0];
+            // var namajasa = hargajasa[2];
+            // var harga = hargajasa[1];
+           
+            // var jumlah = $('#jumlah').val()
+            
+            
+            // var total = parseFloat(harga)*parseFloat(jumlah)
+            
+            var tr = $('#clone_list tr').clone()
+            // if(jumlah == '' ){
+            //     alert_toast('Jumlah tidak boleh kosong.','warning');
+            //     return false;
+            // }
+           
+            // tr.find('[name="idjasa[]"]').val(idjasa)
+            // tr.find('[name="namajasa[]"]').val(namajasa)
+            // tr.find('[name="gajipokok[]"]').val(gaji)
+            // tr.find('[name="jumlah[]"]').val(jumlah)
+            // tr.find('[name="total[]"]').val(total)
+          
+            // tr.find('.gajipokok .visible').text(namajasa)
+           
+            // tr.find('.jumlah').text(jumlah)
+        //    if($('table#list tbody').find('tr[data-id="'+karyawan+'"]').length > 0){
+        //         alert_toast('Item is already exists on the list.','error');
+        //         return false;
+        //     }
+            tr.find('.gajipokok').text(parseFloat(gaji).toLocaleString('en-US'))
+            tr.find('.t_kesehatan').text(parseFloat(tkesehatan).toLocaleString('en-US'))
+            tr.find('.t_makan').text(parseFloat(tmakan).toLocaleString('en-US'))
+            tr.find('.t_makeup').text(parseFloat(tmakeup).toLocaleString('en-US'))
+            tr.find('.t_transport').text(parseFloat(ttransport).toLocaleString('en-US'))
+            tr.find('.t_kasir').text(parseFloat(tkasir).toLocaleString('en-US'))
+            tr.find('.t_kerajinan').text(parseFloat(tkerajinan).toLocaleString('en-US'))
+            tr.find('.lemburhari').text(parseFloat(lemburhari).toLocaleString('en-US'))
+            tr.find('.total').text(parseFloat(total).toLocaleString('en-US'))
+            $('table#list tbody').append(tr)
+        //     calc()
+        //     $('#idjasa').val('')
+        //     $('#hargajasa').val('')
+        //     $('#jumlah').val('')
+
+        //     $('#idjasa').select2({
+        //     placeholder:"Silakan pilih jasa",
+            
+        // })
+    })
     // function rem(_this){
     //     _this.closest('tr').remove()
     //     calc()
