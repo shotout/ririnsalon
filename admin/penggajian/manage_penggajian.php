@@ -1,16 +1,3 @@
-<?php
-if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT id_penggajian,jabatan,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian JOIN karyawan ON penggajian.id_karyawan = karyawan.id JOIN absensi ON penggajian.id_absensi = absensi.id JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan WHERE id_penggajian = '{$_GET['id']}' ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
-        }
-    }
-}
-?>
-
-
-
 <style>
     select[readonly].select2-hidden-accessible + .select2-container {
         pointer-events: none;
@@ -33,60 +20,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <input type="hidden" name ="id" value="<?php echo isset($id_penggajian) ? $id_penggajian : '' ?>">            
             <fieldset>           
             <div class="container-fluid row">
-            <div class="col-md-3">
-                        <!-- <div class="form-group">                          
-                            
-                            <label for="bulan" class="control-label text-info">Bulan</label>
-                            <select  name = "bulan" id="bulan" class="custom-select select3">
-                                    <option selected></option>
-                                    
-                                    <option value="1" 
-                                    <?php echo isset($bulan) && $bulan == 1 ? 'selected': '' ?>>Januari</option>
-                                     
-                                    <option value="2" 
-                                    <?php echo isset($bulan) && $bulan == 2 ? 'selected': '' ?>>Februari</option>
+           
 
-                                    <option value="3" 
-                                    <?php echo isset($bulan) && $bulan == 3 ? 'selected': '' ?>>Maret</option>
-
-                                    <option value="4" 
-                                    <?php echo isset($bulan) && $bulan == 4 ? 'selected': '' ?>>April</option>
-
-                                    <option value="5" 
-                                    <?php echo isset($bulan) && $bulan == 5 ? 'selected': '' ?>>Mei</option>
-
-                                    <option value="6" 
-                                    <?php echo isset($bulan) && $bulan == 6 ? 'selected': '' ?>>Juni</option>
-
-                                    <option value="7" 
-                                    <?php echo isset($bulan) && $bulan == 7 ? 'selected': '' ?>>Juli</option>
-
-                                    <option value="8" 
-                                    <?php echo isset($bulan) && $bulan == 8 ? 'selected': '' ?>>Agustus</option>
-
-                                    <option value="9" 
-                                    <?php echo isset($bulan) && $bulan == 9 ? 'selected': '' ?>>September</option>
-
-                                    <option value="10" 
-                                    <?php echo isset($bulan) && $bulan == 10 ? 'selected': '' ?>>Oktober</option>
-
-                                    <option value="11" 
-                                    <?php echo isset($bulan) && $bulan == 11 ? 'selected': '' ?>>November</option>
-
-                                    <option value="12" 
-                                    <?php echo isset($bulan) && $bulan == 12 ? 'selected': '' ?>>Desember</option>
-                                    
-                                </select>                        
-                            </select>                            
-
-                        </div> -->
-                        
-                    </div>
-
-                    <input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>						                     
+                    <input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>	
+                    
+                    <input type="hidden" name = "text_id_tunjangan" id = "text_id_tunjangan" class="form-control rounded-0" readonly value= "<?php echo isset($id_tunjangan) ? $id_tunjangan : ''  ?>"></input>
+                    
+                    <input type="hidden" name = "text_id_absensi" id = "text_id_absensi" class="form-control rounded-0" readonly value= "<?php echo isset($id_absensi) ? $id_absensi : ''  ?>"></input>
                     
                     <div class="col-md-5">
                         <div class="form-group">                          
+                        
                         
                             <label for="karyawan" class="control-label text-info">Karyawan</label>
                             
@@ -95,11 +39,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                             <option <?php echo !isset($id_karyawan) ? 'selected' : '' ?>disabled></option>
                                                        							
                            	<?php 
-                            $karyawan = $conn->query("SELECT karyawan.`id`,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id WHERE bulan = MONTH(CURDATE()) ORDER BY karyawan.id ASC");
+                            $karyawan = $conn->query("SELECT tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,`id_tunjangan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan WHERE bulan = MONTH(CURDATE()) ORDER BY karyawan.id ASC");
                             while($row=$karyawan->fetch_assoc()):
                             ?>
 
-                            <option value="<?php echo $row['id'].'-'.$row['nama'].'-'.$row['jabatan'].'-'.$row['gajipokok'].'-'.$row['t_kesehatan'].'-'.$row['t_makan'].'-'.$row['t_makeup'].'-'.$row['t_transport'].'-'.$row['t_kasir'].'-'.$row['t_kerajinan'].'-'.$row['lembur']?>" <?php echo isset($id) && $id == $row['id'] ? "selected" : "" ?> ><?php echo $row['nama'] ?></option>					   
+                            <option value="<?php echo $row['id_karyawan'].'-'.$row['nama'].'-'.$row['jabatan'].'-'.$row['gajipokok'].'-'.$row['t_kesehatan'].'-'.$row['t_makan'].'-'.$row['t_makeup'].'-'.$row['t_transport'].'-'.$row['t_kasir'].'-'.$row['t_kerajinan'].'-'.$row['lembur'].'-'.$row['id'].'-'.$row['id_tunjangan']?>" <?php echo isset($id) && $id == $row['id'] ? "selected" : "" ?> ><?php echo $row['nama'] ?></option>					   
                             
                             <?php endwhile; ?>                            
                                                                                       						 
@@ -108,7 +52,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                         </div>
                     </div>
                      
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="control-label text-info">Jabatan</label>                     
                                    
 						<div class="row-md-2">                                  
@@ -116,11 +60,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						</div> 
                                               
                     </div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-md-1 text-center">
                             
                             <label class="control-label text-info"> <?php echo " &nbsp" ?></label>
                             <div class="row-md-2">
-                                <button type="button" class="btn btn-primary" id="add_to_list"> Tambah ke list </button>
+                                <button type="button" class="btn btn-primary" id="add_to_list"> Hitung </button>
                             </div>
                     </div>
                     
@@ -133,10 +77,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <table class="table table-striped table-bordered" id="list">
                 <colgroup>                                          
                     <col width="15%">
+                    <col width="12%">
                     <col width="10%">
                     <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
+                    <col width="12%">
                     <col width="10%">
                     <col width="10%">
                     <col width="25%"> 
@@ -160,7 +104,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                     $total = 0;
                         
                     if(isset($id_karyawan)):
-                    $qry = $conn->query("SELECT karyawan.`id`,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id WHERE karyawan.id = '{$id_karyawan}' and bulan = '{$bulan}'");
+                    $qry = $conn->query("SELECT tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,`id_tunjangan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan WHERE karyawan.id = '{$id_karyawan}' and bulan = '{$bulan}'");
                     while($row = $qry->fetch_assoc()):
                         // $total += $row['hargapaket']
                     ?>
@@ -180,35 +124,41 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </tbody>
                 <tfoot>                    
                     <tr>
-                        <th class="text-right py-1 px-2" colspan="7">Lembur <input style="width:40px " id="lemburhari" name="lemburhari" class='text-left'value="<?php echo isset($lembur) ? $lembur : 0 ?>" readonly> Hari
+                        <th class="text-right py-1 px-2" colspan="7">Lembur <input style="width:40px " id="lemburhari" name="lemburhari" class='text-left'value="<?php echo isset($lembur) ? $lembur : 0 ?>" readonly> Jam
                         
                         <th class="text-right py-1 px-2 lembur"> 0 </th>
                     </tr>
                     <tr>
-                        <th class="text-right py-1 px-2" colspan="7">Point <input style="width:60px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="500" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
-                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        <th class="text-right py-1 px-2" colspan="7">Point <input style="width:60px !important" id="pointangka" name="pointangka" class='' type="number" min="0" max="500" value="0">
+                        <input type="hidden" name="bonus">
                         </th>
-                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="7">Sub Total</th>
-                        <th class="text-right py-1 px-2 sub-total"><?php echo number_format($total,0)  ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="7">Potongan Cashbon <input style="width:100px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="100" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
-                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        <th class="text-right py-1 px-2 point">0
+                       
                         </th>
-                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
                     </tr>
                     <tr>
-                    <th class="text-right py-1 px-2" colspan="7">Potongan Lainnya <input style="width:100px !important" id="disk_perc" name="disk_perc" class='' type="number" min="0" max="100" value="<?php echo isset($disk_perc) ? $disk_perc : 0 ?>">
-                        <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
+                        <th class="text-right py-1 px-2" colspan="7">Total Gaji</th>
+                        <th class="text-right py-1 px-2 sub-total">0</th>
+                    </tr>
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="8">Potongan Cashbon <input class="text-right" style="width:180px !important" id="cashbon" name="cashbon" type="number" value="0">
+                    </th>
+                        
+                    </tr>
+
+                    <tr>
+                    <th class="text-right py-1 px-2" colspan="8">Potongan Lainnya <input class="text-right" style="width:180px !important" id="lainnya" name="lainnya" type="number" value="0">
+                    </th>
+                    </tr>
+
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="7">Gaji Bersih
+                        <input type="hidden" name="gajibersih">
                         </th>
-                        <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="7">Total</th>
-                        <th class="text-right py-1 px-2 grand-total"><?php echo isset($hargapaket) ? number_format($hargapaket,0) : 0 ?></th>
+                       
+                        <th class="text-right py-1 px-2 grandtotal">0
+                        
+                        </th>
                     </tr>
                     
                 </tfoot>
@@ -217,8 +167,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 <hr>
                 
     <div class="card-footer py-1 text-center">
-        <button class="btn btn-flat btn-primary" type="submit" form="absensi-form">Save</button>
-        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=absensi/absensi' ?>">Cancel</a>
+        <button class="btn btn-flat btn-primary" type="submit" form="penggajian-form">Save</button>
+        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=penggajian/penggajian' ?>">Cancel</a>
     </div>
 </div>
 <table id="clone_list" class="d-none">
@@ -235,9 +185,18 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </table>
 
 <script>
+    var total = 0;
+    $('#cashbon').change(function(){
+        calc();
+        })
 
+    $('#lainnya').change(function(){
+        calc();
+        })
 
-      
+    $('#pointangka').change(function(){
+        calc();
+        })  
 
 	$('#nama_karyawan').change(function(){   
         bulan = $('#bulan').val();    
@@ -246,6 +205,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         karyawanarray = karyawan.split("-");
 		// $('#text_id_karyawan').text(tes);
         $("#text_id_karyawan").val(karyawanarray[0]);
+        $("#text_id_absensi").val(karyawanarray[11]);
+        $("#text_id_tunjangan").val(karyawanarray[12]);
+        
                
         jbt = karyawanarray[2];
         var gaji = karyawanarray[3]; 
@@ -308,7 +270,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			 $('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_tunjangan",
+				url:_base_url_+"classes/Master.php?f=save_gaji",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -323,7 +285,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				},
 				success:function(resp){
 					if(resp.status == 'success'){
-						location.replace(_base_url_+"admin/?page=tunjangan/tunjangan");
+						location.replace(_base_url_+"admin/?page=penggajian/penggajian");
 					}else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -365,7 +327,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         var tkasir = karyawanarray[8];
         var tkerajinan = karyawanarray[9];
         var lemburhari = karyawanarray[10];
-        var total = parseInt(gaji)+parseInt(tkesehatan)+parseInt(tmakan)+parseInt(tmakeup)+parseInt(ttransport)+parseInt(tkasir)+parseInt(tkerajinan);
+        total = parseInt(gaji)+parseInt(tkesehatan)+parseInt(tmakan)+parseInt(tmakeup)+parseInt(ttransport)+parseInt(tkasir)+parseInt(tkerajinan);
 
         $("#lemburhari").val(karyawanarray[10]);
 
@@ -420,7 +382,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             tr.find('.lemburhari').text(parseFloat(lemburhari).toLocaleString('en-US'))
             tr.find('.total').text(parseFloat(total).toLocaleString('en-US'))
             $('table#list tbody').append(tr)
-        //     calc()
+            calc()
         //     $('#idjasa').val('')
         //     $('#hargajasa').val('')
         //     $('#jumlah').val('')
@@ -437,26 +399,43 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     //         $('#supplier_id').removeAttr('readonly')
 
     // }
-    // function calc(){
-    //     var sub_total = 0;
-    //     var grand_total = 0;
-    //     var discount = 0;
-    //     var tax = 0;
-    //     $('table#list tbody input[name="total[]"]').each(function(){
-    //         sub_total += parseFloat($(this).val())
-            
-    //     })
-    //     $('table#list tfoot .sub-total').text(parseFloat(sub_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-    //     var discount =   sub_total * (parseFloat($('[name="discount_perc"]').val()) /100)
-    //     sub_total = sub_total - discount;
-    //     var tax =   sub_total * (parseFloat($('[name="tax_perc"]').val()) /100)
-    //     grand_total = sub_total + tax
-    //     $('.discount').text(parseFloat(discount).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-    //     $('[name="discount"]').val(parseFloat(discount))
-    //     $('.tax').text(parseFloat(tax).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-    //     $('[name="tax"]').val(parseFloat(tax))
-    //     $('table#list tfoot .grand-total').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
-    //     $('[name="amount"]').val(parseFloat(grand_total))
+    function calc(){
+        
+        var sub_total = 0;
+        var grand_total = 0;
+        // var discount = 0;
+        // var tax = 0;
+        var pcashbon = (parseFloat($('[name="cashbon"]').val()));
+        var plainnya = (parseFloat($('[name="lainnya"]').val()));
+        var lembur = 0;
+        var point = 0;
+        var tariflembur = 5000;
+        var tarifpoint = 500;
+        
 
-    // }
+        var lembur  =   tariflembur * (parseFloat($('[name="lemburhari"]').val()))
+        var point  =   tarifpoint * (parseFloat($('[name="pointangka"]').val()))
+        // $('table#list tbody input[name="total[]"]').each(function(){
+        //     sub_total += parseFloat($(this).val())
+            
+        // })
+        
+        // var discount =   sub_total * (parseFloat($('[name="discount_perc"]').val()) /100)
+        sub_total = sub_total + lembur + point + total;
+        
+        // var tax =   sub_total * (parseFloat($('[name="tax_perc"]').val()) /100)
+        grand_total = sub_total - pcashbon - plainnya;
+        // $('.discount').text(parseFloat(discount).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="sub-total"]').val(parseFloat(sub_total))
+        $('table#list tfoot .sub-total').text(parseFloat(sub_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('table#list tfoot .lembur').text(parseFloat(lembur).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="lembur"]').val(parseFloat(lembur))
+        $('table#list tfoot .point').text(parseFloat(point).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="bonus"]').val(parseFloat(point))
+        // $('.tax').text(parseFloat(tax).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        // $('[name="tax"]').val(parseFloat(tax))
+        $('table#list tfoot .grandtotal').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
+        $('[name="gajibersih"]').val(parseFloat(grand_total))
+
+    }
 </script>

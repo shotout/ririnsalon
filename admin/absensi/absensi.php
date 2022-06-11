@@ -70,7 +70,7 @@
 							</td>
 							<td><?php echo $row['hadir'] ?> Hari</td>
 							<td><?php echo $row['absen'] ?> Hari</td>
-							<td><?php echo $row['lembur'] ?> Hari</td>
+							<td><?php echo $row['lembur'] ?> Jam</td>
 							<td><?php echo $row['izin'] ?> Hari</td>	
                                                      	
 																				

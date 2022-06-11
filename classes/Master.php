@@ -146,7 +146,7 @@ Class Master extends DBConnection {
 			if(empty($id))
 				$this->settings->set_flashdata('success',"Data karyawan berhasil disimpan.");
 			else
-				$this->settings->set_flashdata('success',"Data karyawana berhasil diperbarui.");
+				$this->settings->set_flashdata('success',"Data karyawan berhasil diperbarui.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['err'] = $this->conn->error."[{$sql}]";
@@ -508,6 +508,50 @@ Class Master extends DBConnection {
 
 
 	function delete_paket(){
+		extract($_POST);
+		$sql = "DELETE FROM `paket_item` where idpaket = '{$id}'";
+		$delete_item = $this->conn->query($sql);
+
+		if($delete_item){
+			$resp['status'] = 'success';
+			$sql1 = "DELETE FROM `paket` where idpaket = '{$id}'";
+			$delete = $this->conn->query($sql1);
+			$this->settings->set_flashdata('success',"Data berhasil dihapus.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+
+	function save_gaji(){
+		extract($_POST);
+		
+				
+		if(empty($id)){
+			$sql = "INSERT INTO `penggajian` set id_karyawan = '$text_id_karyawan' , id_absensi = '$text_id_absensi' , id_tunjangan = '$text_id_tunjangan' , point ='$pointangka', bonus = '$bonus' , p_cashbon = '$cashbon',  p_lain = '$lainnya', total = '$gajibersih'";
+			$save = $this->conn->query($sql);
+		}
+		
+
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"Data penggajian berhasil disimpan.");
+			
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+
+			
+
+		return json_encode($resp);
+	}
+
+
+	function delete_gaji(){
 		extract($_POST);
 		$sql = "DELETE FROM `paket_item` where idpaket = '{$id}'";
 		$delete_item = $this->conn->query($sql);
@@ -1053,6 +1097,12 @@ switch ($action) {
 	break;
 	case 'delete_paket':
 		echo $Master->delete_paket();
+	break;
+	case 'save_gaji':
+		echo $Master->save_gaji();
+	break;
+	case 'delete_gaji':
+		echo $Master->delete_gaji();
 	break;
 
 

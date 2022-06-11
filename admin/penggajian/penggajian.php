@@ -20,7 +20,7 @@
 											
 						<th>Nama</th>						
 						<th>Bulan</th>
-                        <th>Total</th>						
+                        <th>Gaji Bersih</th>						
 						<th>Action</th>
 					</tr>
 				</thead>
@@ -37,7 +37,33 @@
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
 								
                             <td><?php echo $row['nama'] ?></td>                            
-                            <td><?php echo $row['bulan'] ?></td>							
+                            <td>
+								<?php if($row['bulan'] == 1): ?>
+                                    <span>Januari</span>
+                                <?php elseif($row['bulan'] == 2): ?>
+                                    <span>Februari</span>
+								<?php elseif($row['bulan'] == 3): ?>
+                                    <span>Maret</span>
+								<?php elseif($row['bulan'] == 4): ?>
+                                    <span>April</span>
+								<?php elseif($row['bulan'] == 5): ?>
+                                    <span>Mei</span>
+								<?php elseif($row['bulan'] == 6): ?>
+                                    <span>Juni</span>
+								<?php elseif($row['bulan'] == 7): ?>
+                                    <span>Juli</span>
+								<?php elseif($row['bulan'] == 8): ?>
+                                    <span>Agustus</span>
+								<?php elseif($row['bulan'] == 9): ?>
+                                    <span>September</span>
+								<?php elseif($row['bulan'] == 10): ?>
+                                    <span>Oktober</span>
+								<?php elseif($row['bulan'] == 11): ?>
+                                    <span>November</span>
+                                <?php else :?>
+                                    <span>Desember</span>
+                                <?php endif; ?>
+							</td>							
 							<td><?php echo $row['total'] ?></td>
 							
                                                      	
