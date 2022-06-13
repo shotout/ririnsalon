@@ -32,6 +32,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <li class="nav-header">Perawatan</li>
                     <li class="nav-item">
                       <a href="<?php echo base_url ?>admin/?page=jasa/jasa" class="nav-link nav-purchase_order">
@@ -46,6 +47,14 @@
                         <i class="nav-icon fas fa-spa"></i>
                         <p>
                           Paket Perawatan
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="<?php echo base_url ?>admin/?page=transaksi/transaksi" class="nav-link nav-purchase_order">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>
+                          Transaksi
                         </p>
                       </a>
                     </li>

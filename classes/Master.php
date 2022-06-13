@@ -530,14 +530,20 @@ Class Master extends DBConnection {
 		
 				
 		if(empty($id)){
-			$sql = "INSERT INTO `penggajian` set id_karyawan = '$text_id_karyawan' , id_absensi = '$text_id_absensi' , id_tunjangan = '$text_id_tunjangan' , point ='$pointangka', bonus = '$bonus' , p_cashbon = '$cashbon',  p_lain = '$lainnya', total = '$gajibersih'";
+			$sql = "INSERT INTO `penggajian` set id_karyawan = '$text_id_karyawan' , id_absensi = '$text_id_absensi' , id_tunjangan = '$text_id_tunjangan' , point ='$pointangka', bonus = '$bonus' , uanglembur = '$lembur', p_cashbon = '$cashbon',  p_lain = '$lainnya', total = '$gajibersih'";
 			$save = $this->conn->query($sql);
 		}
 		
 
-		if($save){
-			$resp['status'] = 'success';
+		if($save){			
 			if(empty($id))
+			$id_penggajian = $this->conn->insert_id;
+			else
+			$id_penggajian = $id;       
+       		
+			$resp['id'] = $id_penggajian;
+			$resp['status'] = 'success';
+		if(empty($id))
 				$this->settings->set_flashdata('success',"Data penggajian berhasil disimpan.");
 			
 		}else{

@@ -31,17 +31,16 @@ CREATE TABLE `absensi` (
   PRIMARY KEY (`id`),
   KEY `absensi_ibfk_1` (`id_karyawan`),
   CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 /*Data for the table `absensi` */
 
 insert  into `absensi`(`id`,`id_karyawan`,`bulan`,`hadir`,`absen`,`lembur`,`izin`) values 
-(6,7,'1',20,8,2,0),
-(7,7,'2',20,6,0,0),
-(8,8,'1',1,1,1,1),
-(9,7,'3',10,1,1,1),
-(10,8,'4',1,1,1,1),
-(11,7,'10',4,3,6,1);
+(13,7,'1',20,6,5,5),
+(14,8,'1',25,6,10,2),
+(16,7,'6',25,0,10,0),
+(17,7,'3',20,1,16,0),
+(18,11,'6',25,0,20,0);
 
 /*Table structure for table `admin` */
 
@@ -67,6 +66,43 @@ insert  into `admin`(`id`,`nama`,`username`,`password`,`avatar`,`last_login`,`ty
 (11,'Karyawan','karyawan','9e014682c94e0f2cc834bf7348bda428','uploads/avatar-11.png?v=1635920566',NULL,2,'2021-11-03 14:22:46','2022-05-19 12:05:12'),
 (15,'Admin','admin','21232f297a57a5a743894a0e4a801fc3',NULL,NULL,1,'2022-05-19 12:06:33',NULL);
 
+/*Table structure for table `detail_transaksi` */
+
+DROP TABLE IF EXISTS `detail_transaksi`;
+
+CREATE TABLE `detail_transaksi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_transaksi` int(11) DEFAULT NULL,
+  `id_jasa` int(11) DEFAULT NULL,
+  `id_paket` int(11) DEFAULT NULL,
+  `jumlah` int(11) DEFAULT NULL,
+  `subtotal` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `detail_transaksi` */
+
+/*Table structure for table `jasa` */
+
+DROP TABLE IF EXISTS `jasa`;
+
+CREATE TABLE `jasa` (
+  `idjasa` int(11) NOT NULL AUTO_INCREMENT,
+  `namajasa` varchar(250) DEFAULT NULL,
+  `hargajasa` int(11) DEFAULT NULL,
+  `keteranganjasa` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`idjasa`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+/*Data for the table `jasa` */
+
+insert  into `jasa`(`idjasa`,`namajasa`,`hargajasa`,`keteranganjasa`) values 
+(1,'Pedicure',100000,'Potong kuku dan lain-lain'),
+(2,'Manicure',50000,'Testing'),
+(3,'Potong Rambut',40000,''),
+(4,'Catok',60000,''),
+(5,'Smoothing',60000,'');
+
 /*Table structure for table `karyawan` */
 
 DROP TABLE IF EXISTS `karyawan`;
@@ -80,13 +116,55 @@ CREATE TABLE `karyawan` (
   `gajipokok` int(11) DEFAULT NULL,
   `tanggalmasuk` date DEFAULT NULL,
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `karyawan` */
 
 insert  into `karyawan`(`id`,`nama`,`alamat`,`nohp`,`jabatan`,`gajipokok`,`tanggalmasuk`) values 
-(7,'Karyawan','Riau','08110239232',2,2000000,'2022-05-19'),
-(8,'Hevalo','Pekanbaru','123123132',2,2000000,'2022-05-19');
+(7,'Dika','Riau','08110239232',1,2000000,'2022-05-19'),
+(8,'Rian','Pekanbaru','123123132',2,1500000,'2022-05-19'),
+(9,'Randy','Padang','0822123123',3,2300000,'2022-06-01'),
+(10,'Agung','Jambi','0811556677',1,2500000,'2022-06-04'),
+(11,'Mira','Pekanbaru','08145112332',3,2500000,'2022-06-02');
+
+/*Table structure for table `paket` */
+
+DROP TABLE IF EXISTS `paket`;
+
+CREATE TABLE `paket` (
+  `idpaket` int(11) NOT NULL AUTO_INCREMENT,
+  `namapaket` varchar(250) DEFAULT NULL,
+  `hargapaket` int(11) DEFAULT NULL,
+  `diskon` int(11) DEFAULT NULL,
+  `disk_perc` int(11) DEFAULT NULL,
+  `pajak` int(11) DEFAULT NULL,
+  `pajak_perc` int(11) DEFAULT NULL,
+  `keteranganpaket` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`idpaket`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+
+/*Data for the table `paket` */
+
+insert  into `paket`(`idpaket`,`namapaket`,`hargapaket`,`diskon`,`disk_perc`,`pajak`,`pajak_perc`,`keteranganpaket`) values 
+(36,'Perawatan Pengantin',418000,20000,5,38000,10,'Untuk pengantin wanita');
+
+/*Table structure for table `paket_item` */
+
+DROP TABLE IF EXISTS `paket_item`;
+
+CREATE TABLE `paket_item` (
+  `idpaket` int(11) DEFAULT NULL,
+  `idjasa` int(11) DEFAULT NULL,
+  `jumlah` int(11) DEFAULT NULL,
+  `subtotal` int(11) DEFAULT NULL,
+  KEY `idjasa` (`idjasa`),
+  CONSTRAINT `paket_item_ibfk_1` FOREIGN KEY (`idjasa`) REFERENCES `jasa` (`idjasa`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `paket_item` */
+
+insert  into `paket_item`(`idpaket`,`idjasa`,`jumlah`,`subtotal`) values 
+(36,1,4,400000);
 
 /*Table structure for table `pemasukan` */
 
@@ -99,12 +177,16 @@ CREATE TABLE `pemasukan` (
   `amount` int(11) DEFAULT NULL,
   `keteranganmasuk` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idpemasukan`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 /*Data for the table `pemasukan` */
 
 insert  into `pemasukan`(`idpemasukan`,`noreferensi`,`tanggalpemasukan`,`amount`,`keteranganmasuk`) values 
-(6,'MREF0001','2022-05-17',100000,'555555');
+(6,'MREF0001','2022-05-17',100000,'555555'),
+(7,'MREF0002','2022-05-16',200000,'22'),
+(8,'MREF0003','2022-06-19',2500000,''),
+(9,'MREF0004','2022-06-02',600000,''),
+(10,'MREF0005','2022-06-07',5000000,'');
 
 /*Table structure for table `pengeluaran` */
 
@@ -117,14 +199,16 @@ CREATE TABLE `pengeluaran` (
   `amount_pengeluaran` int(11) DEFAULT NULL,
   `keterangankeluar` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idpengeluaran`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 /*Data for the table `pengeluaran` */
 
 insert  into `pengeluaran`(`idpengeluaran`,`noreferensi_pengeluaran`,`tanggal_pengeluaran`,`amount_pengeluaran`,`keterangankeluar`) values 
 (10,'KREF0001','2022-05-17',4000,'hhhhh'),
 (11,'KREF0002','2022-05-17',6000,'ffff'),
-(12,'KREF0003','2022-05-16',50000,'ddd');
+(12,'KREF0003','2022-05-16',50000,'ddd'),
+(13,'KREF0004','2022-05-18',5000,'asdkasd'),
+(14,'KREF0005','2022-06-01',10000000,'Modal Awal');
 
 /*Table structure for table `penggajian` */
 
@@ -137,19 +221,25 @@ CREATE TABLE `penggajian` (
   `id_tunjangan` int(11) DEFAULT NULL,
   `point` int(11) DEFAULT NULL,
   `bonus` int(11) DEFAULT NULL,
+  `uanglembur` int(11) DEFAULT NULL,
   `p_cashbon` int(11) DEFAULT NULL,
   `p_lain` int(11) DEFAULT NULL,
   `total` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_penggajian`),
   KEY `id_karyawan` (`id_karyawan`),
   KEY `penggajian_ibfk_2` (`id_absensi`),
-  KEY `penggajian_ibfk_3` (`id_tunjangan`),
+  KEY `id_tunjangan` (`id_tunjangan`),
   CONSTRAINT `penggajian_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `penggajian_ibfk_2` FOREIGN KEY (`id_absensi`) REFERENCES `absensi` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `penggajian_ibfk_3` FOREIGN KEY (`id_tunjangan`) REFERENCES `penggajian` (`id_penggajian`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `penggajian_ibfk_3` FOREIGN KEY (`id_tunjangan`) REFERENCES `tunjangan` (`id_tunjangan`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 /*Data for the table `penggajian` */
+
+insert  into `penggajian`(`id_penggajian`,`id_karyawan`,`id_absensi`,`id_tunjangan`,`point`,`bonus`,`uanglembur`,`p_cashbon`,`p_lain`,`total`) values 
+(9,7,16,3,100,50000,50000,60000,0,2100000),
+(15,11,18,8,0,0,100000,0,0,2696000),
+(16,7,16,3,100,50000,50000,100000,200000,1860000);
 
 /*Table structure for table `system_info` */
 
@@ -172,6 +262,24 @@ insert  into `system_info`(`id`,`meta_field`,`meta_value`) values
 (14,'cover','uploads/cover-1652865745.png'),
 (15,'content','Array');
 
+/*Table structure for table `transaksi` */
+
+DROP TABLE IF EXISTS `transaksi`;
+
+CREATE TABLE `transaksi` (
+  `id_transaksi` int(11) NOT NULL AUTO_INCREMENT,
+  `nofaktur` varchar(25) DEFAULT NULL,
+  `tanggal` date DEFAULT NULL,
+  `namapelanggan` varchar(150) DEFAULT NULL,
+  `nohp_pelanggan` varchar(15) DEFAULT NULL,
+  `diskon` int(11) DEFAULT NULL,
+  `pajak` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_transaksi`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `transaksi` */
+
 /*Table structure for table `tunjangan` */
 
 DROP TABLE IF EXISTS `tunjangan`;
@@ -188,12 +296,16 @@ CREATE TABLE `tunjangan` (
   PRIMARY KEY (`id_tunjangan`),
   KEY `id_karyawan` (`id_karyawan`),
   CONSTRAINT `tunjangan_ibfk_1` FOREIGN KEY (`id_karyawan`) REFERENCES `karyawan` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tunjangan` */
 
 insert  into `tunjangan`(`id_tunjangan`,`id_karyawan`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`) values 
-(3,8,123123,12312312,200,14141,123123,1414);
+(3,7,10000,10000,10000,10000,10000,10000),
+(5,8,20000,20000,20000,20000,20000,20000),
+(6,9,15000,15000,15000,15000,15000,15000),
+(7,10,13000,13000,13000,13000,13000,13000),
+(8,11,16000,16000,16000,16000,16000,16000);
 
 /*Table structure for table `user_meta` */
 

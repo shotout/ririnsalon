@@ -1,8 +1,8 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Penggajian Karyawan</h3>
+		<h3 class="card-title">Transaksi</h3>
 		<div class="card-tools">
-		<a href="?page=penggajian/manage_penggajian" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Data Penggajian</a>
+		<a href="?page=penggajian/manage_penggajian" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Transaksi</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -18,7 +18,7 @@
 				<thead>
 					<tr>
 											
-						<th>Nama</th>						
+						<th>Pelanggan</th>						
 						<th>Bulan</th>
                         <th>Gaji Bersih</th>						
 						<th>Action</th>
@@ -76,7 +76,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">	
-								  <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=penggajian/view_penggajian&id='.$row['id_penggajian'] ?>" data-id="<?php echo $row['id_penggajian'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+								  <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=penggajian/view_penggajian&id='.$row['id_penggajian'] ?>" data-id="<?php echo $row['id_penggajian'] ?>"><span class="fa fa-eye text-dark"></span> Detail</a>
 				                  
 							</td>
 						</tr>
