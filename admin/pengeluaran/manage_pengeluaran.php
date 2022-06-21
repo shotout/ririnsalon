@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `pengeluaran` where idpengeluaran = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `kas` where idkas = '{$_GET['id']}' and statuskas ='keluar'");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -13,7 +13,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	<form action="" id="pengeluaran-form">
 	<div class="form-group">
 	<?php
-	$qry = $conn->query("SELECT MAX(noreferensi_pengeluaran) AS kodeTerbesar FROM pengeluaran;");
+	$qry = $conn->query("SELECT MAX(noreferensi) AS kodeTerbesar FROM kas where statuskas ='keluar';");
 	$data = mysqli_fetch_array($qry);
 	$koderef = $data['kodeTerbesar'];
  
@@ -28,26 +28,26 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	
 	?>
 
-			<input type="hidden" name="idpengeluaran" id="idpengeluaran" class="form-control rounded-0" value= "<?php echo isset($idpengeluaran) ? $idpengeluaran : ''  ?>" readonly>
+			<input type="hidden" name="idkas" id="idkas" class="form-control rounded-0" value= "<?php echo isset($idkas) ? $idkas : ''  ?>" readonly>
 
 			<label for="noreferensi" class="control-label">No Referensi</label>
-			<input type="text" name="noreferensi_pengeluaran" id="noreferensi_pengeluaran" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly>
+			<input type="text" name="noreferensi" id="noreferensi" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly>
 		</div>
 		
 		<div class="form-group">
-			<label for="tanggal_pengeluaran" class="control-label">Tanggal Masuk</label>
-			<input type="date" name="tanggal_pengeluaran" id="tanggal_pengeluaran" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggal_pengeluaran) ? $tanggal_pengeluaran : ''; ?>">
+			<label for="tanggal" class="control-label">Tanggal Pengeluaran</label>
+			<input type="date" name="tanggal" id="tanggal" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggal) ? $tanggal : ''; ?>">
 		</div>			
         
         <div class="form-group">
-			<label for="amount_pengeluaran" class="control-label">Amount</label>
-			<input type="number" name="amount_pengeluaran" id="amount_pengeluaran" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($amount_pengeluaran) ? $amount_pengeluaran : ''; ?>">
+			<label for="amount" class="control-label">Amount</label>
+			<input type="number" name="amount" id="amount" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($amount) ? $amount : ''; ?>">
 		</div>
         
 
 		<div class="form-group">
-			<label for="keterangankeluar" class="control-label">Keterangan</label>
-			<textarea type="text" name="keterangankeluar" id="keterangankeluar" class="form-control rounded-0" value="<?php echo isset($keterangankeluar) ? $keterangankeluar : ''; ?>"></textarea>
+			<label for="keterangan" class="control-label">Keterangan</label>
+			<textarea type="text" name="keterangan" id="keterangan" class="form-control rounded-0" value="<?php echo isset($keterangan) ? $keterangan : ''; ?>"></textarea>
 		</div>
 
         

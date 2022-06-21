@@ -1,6 +1,6 @@
 <?php require_once('./../../config.php') ?>
 <?php 
- $qry = $conn->query("SELECT * from pemasukan where idpemasukan = '{$_GET['id']}' ");
+ $qry = $conn->query("SELECT * from kas where idkas = '{$_GET['id']}' and statuskas ='masuk'");
  if($qry->num_rows > 0){
      foreach($qry->fetch_assoc() as $k => $v){
          $$k=$v;
@@ -23,13 +23,13 @@
                         <dd class="pl-3"><?php echo $noreferensi ?></dd>
 
                         <dt class="text-info">Tanggal Pemasukan</dt>
-                        <dd class="pl-3"><?php echo isset($tanggalpemasukan) ? date('d M Y', strtotime($tanggalpemasukan)) : '' ?></dd>
+                        <dd class="pl-3"><?php echo isset($tanggal) ? date('d M Y', strtotime($tanggal)) : '' ?></dd>
 
                         <dt class="text-info">Amount</dt>
                         <dd class="pl-3"><?php echo isset($amount) ? "Rp " . number_format($amount,0) : '' ?></dd>
 
                         <dt class="text-info">Keterangan</dt>
-                        <dd class="pl-3"><?php echo isset($keteranganmasuk) ? $keteranganmasuk : '' ?></dd>                                             
+                        <dd class="pl-3"><?php echo isset($keterangan) ? $keterangan : '' ?></dd>                                             
                         
 
                         

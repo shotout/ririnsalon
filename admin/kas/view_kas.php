@@ -1,5 +1,5 @@
-<?php 
-$qry = $conn->query("SELECT * FROM pemasukan  where tanggalpemasukan = '{$_GET['id']}'");
+<?php if  
+$qry = $conn->query("SELECT * FROM kas  where tanggal = '{$_GET['id']}'");
 if($qry->num_rows >0){
     foreach($qry->fetch_array() as $k => $v){
         $$k = $v;
@@ -14,7 +14,7 @@ if($qry->num_rows >0){
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="control-label text-info">Detail Kas untuk tanggal <?php echo date("d M Y",strtotime($tanggalpemasukan)) ?></h4>
+                    <h4 class="control-label text-info">Detail Kas untuk tanggal <?php echo date("d M Y",strtotime($tanggal)) ?></h4>
                 </div>
                 
             </div>

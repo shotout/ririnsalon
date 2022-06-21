@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `pemasukan` where idpemasukan = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `kas` where idkas = '{$_GET['id']}' and statuskas ='masuk'");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -13,7 +13,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	<form action="" id="pemasukan-form">
 	<div class="form-group">
 	<?php
-	$qry = $conn->query("SELECT MAX(noreferensi) AS kodeTerbesar FROM pemasukan;");
+	$qry = $conn->query("SELECT MAX(noreferensi) AS kodeTerbesar FROM kas where statuskas ='masuk';");
 	$data = mysqli_fetch_array($qry);
 	$koderef = $data['kodeTerbesar'];
  
@@ -28,15 +28,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	
 	?>
 
-			<input type="hidden" name="idpemasukan" id="idpemasukan" class="form-control rounded-0" value= "<?php echo isset($idpemasukan) ? $idpemasukan : ''  ?>" readonly>
-
+			<input type="hidden" name="idkas" id="idkas" class="form-control rounded-0" value= "<?php echo isset($idkas) ? $idkas : ''  ?>" readonly>
+			
 			<label for="noreferensi" class="control-label">No Referensi</label>
 			<input type="text" name="noreferensi" id="noreferensi" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly>
 		</div>
 		
 		<div class="form-group">
-			<label for="tanggalpemasukan" class="control-label">Tanggal Masuk</label>
-			<input type="date" name="tanggalpemasukan" id="tanggalpemasukan" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggalpemasukan) ? $tanggalpemasukan : ''; ?>">
+			<label for="tanggal" class="control-label">Tanggal Masuk</label>
+			<input type="date" name="tanggal" id="tanggal" step="any" class="form-control rounded-0 text-end" value="<?php echo isset($tanggal) ? $tanggal : ''; ?>">
 		</div>			
         
         <div class="form-group">
@@ -46,8 +46,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         
 
 		<div class="form-group">
-			<label for="keteranganmasuk" class="control-label">Keterangan</label>
-			<textarea type="text" name="keteranganmasuk" id="keteranganmasuk" class="form-control rounded-0" value="<?php echo isset($keteranganmasuk) ? $keteranganmasuk : ''; ?>"></textarea>
+			<label for="keterangan" class="control-label">Keterangan</label>
+			<textarea type="text" name="keterangan" id="keterangan" class="form-control rounded-0" value="<?php echo isset($keterangan) ? $keterangan : ''; ?>"></textarea>
 		</div>
 
         
@@ -55,7 +55,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	</form>
 </div>
 <script>
-  
+	
 	$(document).ready(function(){
         
 		$('#pemasukan-form').submit(function(e){

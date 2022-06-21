@@ -1,6 +1,6 @@
 <?php 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket ='{$_GET['id']}'");
+    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket ='{$_GET['id']}'");
     if($qry->num_rows >0){
         foreach($qry->fetch_array() as $k => $v){
             $$k = $v;
@@ -97,7 +97,7 @@ if(isset($_GET['id'])){
                         $total = 0;
                         
                         if(isset($idpaket)):
-                        $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
+                        $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
                         while($row = $qry->fetch_assoc()):
                             $total += $row['hargapaket']
                         ?>
@@ -142,13 +142,7 @@ if(isset($_GET['id'])){
                                 <input type="hidden" name="diskon" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
                             </th>
                             <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon) : 0 ?></th>
-                        </tr>
-                        <tr>
-                            <th class="text-right py-1 px-2" colspan="5">Pajak <input style="width:40px !important" id="pajak_perc" name="pajak_perc" class='' type="number" min="0" max="100" value="<?php echo isset($pajak_perc) ? $pajak_perc : 0 ?>">%
-                                <input type="hidden" name="pajak" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
-                            </th>
-                            <th class="text-right py-1 px-2 pajak"><?php echo isset($pajak) ? number_format($pajak) : 0 ?></th>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <th class="text-right py-1 px-2" colspan="5">Total Harga Paket
                                 <input type="hidden" name="amount" value="<?php echo isset($diskon) ? $diskon : 0 ?>">
@@ -202,9 +196,7 @@ if(isset($_GET['id'])){
         calc();
         })
 
-    $('#pajak_perc').change(function(){
-        calc();
-        })
+    
 
     $('#idjasa').change(function(){
         jasa = $('#idjasa').val();
@@ -276,7 +268,7 @@ if(isset($_GET['id'])){
                 rem($(this))
             })
             
-            $('[name="disk_perc"],[name="pajak_perc"]').on('input',function(){
+            $('[name="disk_perc"]').on('input',function(){
                 calc()
             })
             // $('#supplier_id').attr('readonly','readonly')
@@ -339,7 +331,7 @@ if(isset($_GET['id'])){
         var sub_total = 0;
         var grand_total = 0;
         var diskon = 0;
-        var pajak = 0;
+        
         $('table#list tbody input[name="total[]"]').each(function(){
             sub_total += parseFloat($(this).val())
             
@@ -347,12 +339,10 @@ if(isset($_GET['id'])){
         $('table#list tfoot .sub-total').text(parseFloat(sub_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:2}))
         var diskon =   sub_total * (parseFloat($('[name="disk_perc"]').val()) /100)
         sub_total = sub_total - diskon;
-        var pajak =   sub_total * (parseFloat($('[name="pajak_perc"]').val()) /100)
-        grand_total = sub_total + pajak
+        
+        grand_total = sub_total 
         $('.diskon').text(parseFloat(diskon).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
-        $('[name="diskon"]').val(parseFloat(diskon))
-        $('.pajak').text(parseFloat(pajak).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
-        $('[name="pajak"]').val(parseFloat(pajak))
+        $('[name="diskon"]').val(parseFloat(diskon))        
         $('table#list tfoot .grand-total').text(parseFloat(grand_total).toLocaleString('en-US',{style:'decimal',maximumFractionDigit:0}))
         $('[name="amount"]').val(parseFloat(grand_total))
 

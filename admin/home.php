@@ -45,7 +45,7 @@
             <span class="info-box-text">Pemasukan</span>
             <span class="info-box-number text-right">
             <?php 
-                    echo $conn->query("SELECT * FROM `pemasukan`")->num_rows;
+                    echo $conn->query("SELECT * FROM `kas` where statuskas ='masuk'")->num_rows;
                 ?>
             </span>
             </div>
@@ -62,7 +62,7 @@
             <span class="info-box-text">Pengeluaran</span>
             <span class="info-box-number text-right">
             <?php 
-                    echo $conn->query("SELECT * FROM `pengeluaran`")->num_rows;
+                    echo $conn->query("SELECT * FROM `kas` where statuskas ='keluar'")->num_rows;
                 ?>
             </span>
             </div>

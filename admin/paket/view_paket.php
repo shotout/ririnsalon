@@ -1,5 +1,5 @@
 <?php 
-$qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$_GET['id']}'");
+$qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$_GET['id']}'");
 if($qry->num_rows >0){
     foreach($qry->fetch_array() as $k => $v){
         $$k = $v;
@@ -43,9 +43,9 @@ if($qry->num_rows >0){
                     $total = 0;
                         
                     if(isset($idpaket)):
-                    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,pajak,pajak_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
+                    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
                     while($row = $qry->fetch_assoc()):
-                        $total += $row['hargapaket']
+                        $total = $row['hargapaket'] + $row['diskon']
                     ?>
                     <tr>
                        
@@ -84,13 +84,9 @@ if($qry->num_rows >0){
                     <tr>
                         <th class="text-right py-1 px-2" colspan="4">Discount <?php echo isset($disk_perc) ? $disk_perc : 0 ?>%</th>
                         <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon,0) : 0 ?></th>
-                    </tr>
+                    </tr>                    
                     <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Pajak <?php echo isset($pajak_perc) ? $pajak_perc : 0 ?>%</th>
-                        <th class="text-right py-1 px-2 pajak"><?php echo isset($pajak) ? number_format($pajak,0) : 0 ?></th>
-                    </tr>
-                    <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Total</th>
+                        <th class="text-right py-1 px-2" colspan="4">Harga Paket</th>
                         <th class="text-right py-1 px-2 grand-total"><?php echo isset($hargapaket) ? number_format($hargapaket,0) : 0 ?></th>
                     </tr>
                 </tfoot>

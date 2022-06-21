@@ -1,6 +1,6 @@
 <?php 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT `id_penggajian`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`total`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian ='{$_GET['id']}'");
+    $qry = $conn->query("SELECT `id_penggajian`,`noslip`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`total`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian ='{$_GET['id']}'");
     if($qry->num_rows >0){
         foreach($qry->fetch_array() as $k => $v){
             $$k = $v;
@@ -23,14 +23,28 @@ if(isset($_GET['id'])){
 </style>
 <div class="card card-outline card-primary">
     <div class="card-header">Gaji Karyawan</h4>
-    </div>
-    
+    </div>    
     <div class="card-body">
-        <form action="" id="penggajian-form"> 
+        <form action="" id="penggajian-form">
+
+        <?php
+        $qry = $conn->query("SELECT MAX(noslip) AS kodeTerbesar FROM penggajian");
+		$data = mysqli_fetch_array($qry);
+
+		$koderef = $data['kodeTerbesar'];
+
+		$urutan = (int) substr($koderef, 3, 4); 
+		$urutan++; 
+		$huruf = "SG-";
+
+		$koderef = $huruf . sprintf("%04s", $urutan); 
+        ?>
+       
+
         <input type="hidden" name ="id" value="<?php echo isset($id_penggajian) ? $id_penggajian : '' ?>">            
             <fieldset>           
             <div class="container-fluid row">
-           
+                    <input type="hidden" name = "noslip" id = "noslip" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly></input>	
 
                     <input type="hidden" name = "text_id_karyawan" id = "text_id_karyawan" class="form-control rounded-0" readonly value= "<?php echo isset($id_karyawan) ? $id_karyawan : ''  ?>"></input>	
                     

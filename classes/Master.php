@@ -294,18 +294,14 @@ Class Master extends DBConnection {
 		
 		extract($_POST);
 		$noreferensi = $_POST['noreferensi'];		
-		$tanggalpemasukan = $_POST['tanggalpemasukan'];
+		$tanggalpemasukan = $_POST['tanggal'];
 		$amount = $_POST['amount'];
-		$keteranganmasuk = $_POST['keteranganmasuk'];
+		$keteranganmasuk = $_POST['keterangan'];
 						
-		$check = $this->conn->query("SELECT * from pemasukan WHERE noreferensi = '$noreferensi'")->num_rows;
-		
-		if($this->capture_err())
-			return $this->capture_err();
-					
+							
 		if(empty($id)){			
 			
-			$sql = "INSERT INTO `pemasukan` set noreferensi = '$noreferensi' , tanggalpemasukan = '$tanggalpemasukan' , amount = '$amount' , keteranganmasuk ='$keteranganmasuk'";
+			$sql = "INSERT INTO `kas` set noreferensi = '$noreferensi' , tanggal = '$tanggalpemasukan' , amount = '$amount' , keterangan ='$keteranganmasuk', statuskas ='masuk'";
 			$save = $this->conn->query($sql);	
 		}
 
@@ -323,7 +319,7 @@ Class Master extends DBConnection {
 
 	function delete_pemasukan(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `pemasukan` where idpemasukan = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `kas` where idkas = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Data pemasukan berhasil dihapus.");
@@ -341,19 +337,15 @@ Class Master extends DBConnection {
 	function save_pengeluaran(){
 		
 		extract($_POST);
-		$noreferensi = $_POST['noreferensi_pengeluaran'];		
-		$tanggal_pengeluaran = $_POST['tanggal_pengeluaran'];
-		$amount = $_POST['amount_pengeluaran'];
-		$keterangankeluar = $_POST['keterangankeluar'];
+		$noreferensi = $_POST['noreferensi'];		
+		$tanggal_pengeluaran = $_POST['tanggal'];
+		$amount = $_POST['amount'];
+		$keterangankeluar = $_POST['keterangan'];
 		
-		$check = $this->conn->query("SELECT * from pengeluaran WHERE noreferensi_pengeluaran = '$noreferensi'")->num_rows;
-		
-		if($this->capture_err())
-			return $this->capture_err();
 		
 			
 		if(empty($id)){			
-			$sql = "INSERT INTO `pengeluaran` set noreferensi_pengeluaran = '$noreferensi' , tanggal_pengeluaran = '$tanggal_pengeluaran' , amount_pengeluaran = '$amount' , keterangankeluar ='$keterangankeluar'";
+			$sql = "INSERT INTO `kas` set noreferensi = '$noreferensi' , tanggal = '$tanggal_pengeluaran' , amount = '$amount' , keterangan ='$keterangankeluar', statuskas = 'keluar'";
 			$save = $this->conn->query($sql);
 		}
 		
@@ -371,7 +363,7 @@ Class Master extends DBConnection {
 
 	function delete_pengeluaran(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `pengeluaran` where idpengeluaran = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `kas` where idkas = '{$id}' and statuskas = 'keluar'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Data pengeluaran berhasil dihapus.");
@@ -408,7 +400,7 @@ Class Master extends DBConnection {
 				exit;
 			}
 
-			$sql = "INSERT INTO `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa'";
+			$sql = "INSERT INTO `jasa` set namajasa = '$namajasa' , hargajasa = '$hargajasa' , keteranganjasa = '$keteranganjasa', flagjasa = '1'";
 			$save = $this->conn->query($sql);
 		}else{
 
@@ -460,9 +452,9 @@ Class Master extends DBConnection {
 			}
 		}
 		if(empty($id)){
-			$sql = "INSERT INTO `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', pajak = '$pajak' , pajak_perc = '$pajak_perc',  keteranganpaket = '$keteranganpaket'";
+			$sql = "INSERT INTO `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', keteranganpaket = '$keteranganpaket', flagpaket = '2'";
 		}else{
-			$sql = "UPDATE `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', pajak = '$pajak' , pajak_perc = '$pajak_perc',  keteranganpaket = '$keteranganpaket' where idpaket = '{$id}'";
+			$sql = "UPDATE `paket` set namapaket = '$namapaket' , hargapaket = '$amount' , diskon = '$diskon' , disk_perc ='$disk_perc', keteranganpaket = '$keteranganpaket' where idpaket = '{$id}'";
 		}
 		$save = $this->conn->query($sql);
 		if($save){
@@ -526,11 +518,11 @@ Class Master extends DBConnection {
 
 
 	function save_gaji(){
-		extract($_POST);
+	extract($_POST);
 		
 				
 		if(empty($id)){
-			$sql = "INSERT INTO `penggajian` set id_karyawan = '$text_id_karyawan' , id_absensi = '$text_id_absensi' , id_tunjangan = '$text_id_tunjangan' , point ='$pointangka', bonus = '$bonus' , uanglembur = '$lembur', p_cashbon = '$cashbon',  p_lain = '$lainnya', total = '$gajibersih'";
+			$sql = "INSERT INTO `penggajian` set noslip = '$noslip' , id_karyawan = '$text_id_karyawan' , id_absensi = '$text_id_absensi' , id_tunjangan = '$text_id_tunjangan' , point ='$pointangka', bonus = '$bonus' , uanglembur = '$lembur', p_cashbon = '$cashbon',  p_lain = '$lainnya', total = '$gajibersih'";
 			$save = $this->conn->query($sql);
 		}
 		
@@ -573,6 +565,69 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+
+
+
+	function save_transaksi(){
+		extract($_POST);
+		
+		$id_item = $_POST['id_jasa'];
+		$id = $_POST['idpaket'];	
+		$flag = $_POST['flagjasa'];
+			 
+		
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('id')) && !is_array($_POST[$k])){
+				if(!is_numeric($v))
+				$v= $this->conn->real_escape_string($v);
+				if(!empty($data)) $data .=", ";
+				$data .=" `{$k}` = '{$v}' ";
+			}
+		}
+		if(empty($id)){
+			$sql = "INSERT INTO `transaksi` set nofaktur = '$nofaktur' , tanggal = NOW() , namapelanggan = '$namapelanggan',nohp_pelanggan = '$nohp_pelanggan', diskon = '$diskon' , pajak ='$pajak', total = '$amount'";
+		}
+		$save = $this->conn->query($sql);
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+			$id_transaksi = $this->conn->insert_id;
+			else
+			$id_transaksi = $id;       
+       		
+			$resp['id'] = $id_transaksi;
+			$data = "";
+			foreach($id_item as $k =>$v){
+				if(!empty($data)) $data .=", ";
+				$data .= "('{$id_item}','{$jumlah[$k]}','{$total[$k]}','{$flag[$k]}')";
+				
+			}
+			if(!empty($data)){
+				$this->conn->query("DELETE FROM `detail_transaksi` where id_transaksi = '{$id_transaksi}'");
+				$save = $this->conn->query("INSERT INTO `detail_transaksi` (`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}");
+				if(!$save){
+					$resp['status'] = 'failed';
+					if(empty($id)){
+						$this->conn->query("DELETE FROM `transaksi` where id_transaksi '{$id_transaksi}'");
+					}
+					$resp['msg'] = 'Gagal menyimpan. Error: '.$this->conn->error;
+					$resp['sql'] = "INSERT INTO `detail_transaksi` (`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}";
+				}
+			}
+		}else{
+			$resp['status'] = 'failed';
+			$resp['msg'] = 'An error occured. Error: '.$this->conn->error;
+		}
+		if($resp['status'] == 'success'){
+			if(empty($id)){
+				$this->settings->set_flashdata('success'," Transaksi Sukses");
+			}
+		}
+
+		return json_encode($resp);
+	}
+
 
 
 	function save_po(){
@@ -1110,6 +1165,9 @@ switch ($action) {
 	case 'delete_gaji':
 		echo $Master->delete_gaji();
 	break;
+	case 'save_transaksi':
+		echo $Master->save_transaksi();
+	break;
 
 
 	// case 'get_item':
@@ -1142,6 +1200,6 @@ switch ($action) {
 	default:
 
 
-		// echo $sysset->index();
+		echo $sysset->index();
 		break;
 }

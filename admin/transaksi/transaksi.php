@@ -1,8 +1,8 @@
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Transaksi</h3>
+		<h3 class="card-title">Daftar Transaksi</h3>
 		<div class="card-tools">
-		<a href="?page=penggajian/manage_penggajian" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Tambah Transaksi</a>
+			<a href="<?php echo base_url ?>admin/?page=transaksi/manage_transaksi" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Transaksi</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -10,64 +10,35 @@
         <div class="container-fluid">
 			<table class="table table-hovered table-striped">
 				<colgroup>
-					<col width="20%">
-					<col width="13%">
-					<col width="13%">
+					<!-- <col width="5%"> -->
+					<col width="25%">
+					<col width="15%">
+					<col width="15%">
 					<col width="5%">
+					
 				</colgroup>
 				<thead>
 					<tr>
-											
-						<th>Pelanggan</th>						
-						<th>Bulan</th>
-                        <th>Gaji Bersih</th>						
+						<!-- <th>ID</th>						 -->
+						<th>No Faktur</th>						
+						<th>Tanggal</th>
+                        <th>Total</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT id_penggajian,penggajian.id_karyawan,penggajian.id_absensi,tunjangan.id_tunjangan,nama,bulan,POINT,bonus,p_cashbon,p_lain,total FROM penggajian 
-						JOIN karyawan ON penggajian.id_karyawan = karyawan.id 
-						JOIN absensi ON penggajian.id_absensi = absensi.id
-						JOIN tunjangan ON penggajian.id_tunjangan = tunjangan.id_tunjangan order by id_penggajian asc ");
+						$qry = $conn->query("SELECT nofaktur,tanggal,total from transaksi order by nofaktur asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
-								
-                            <td><?php echo $row['nama'] ?></td>                            
-                            <td>
-								<?php if($row['bulan'] == 1): ?>
-                                    <span>Januari</span>
-                                <?php elseif($row['bulan'] == 2): ?>
-                                    <span>Februari</span>
-								<?php elseif($row['bulan'] == 3): ?>
-                                    <span>Maret</span>
-								<?php elseif($row['bulan'] == 4): ?>
-                                    <span>April</span>
-								<?php elseif($row['bulan'] == 5): ?>
-                                    <span>Mei</span>
-								<?php elseif($row['bulan'] == 6): ?>
-                                    <span>Juni</span>
-								<?php elseif($row['bulan'] == 7): ?>
-                                    <span>Juli</span>
-								<?php elseif($row['bulan'] == 8): ?>
-                                    <span>Agustus</span>
-								<?php elseif($row['bulan'] == 9): ?>
-                                    <span>September</span>
-								<?php elseif($row['bulan'] == 10): ?>
-                                    <span>Oktober</span>
-								<?php elseif($row['bulan'] == 11): ?>
-                                    <span>November</span>
-                                <?php else :?>
-                                    <span>Desember</span>
-                                <?php endif; ?>
-							</td>							
-							<td><?php echo $row['total'] ? "Rp " . number_format($row['total'],0) : ''  ?></td>
-							
-                                                     	
-																				
+                            <td><?php echo $row['nofaktur'] ?></td>	
+                            <td><?php echo date("d M Y",strtotime($row['tanggal'])) ?></td>                           
+                            <td><?php echo $row['total'] ? "Rp " . number_format($row['hargapaket'],0) : '' ?></td>	
+                            
+													
 							
 
 							<td align="center">
@@ -75,9 +46,13 @@
 				                  		Action
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
-				                  <div class="dropdown-menu" role="menu">	
-								  <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=penggajian/view_penggajian&id='.$row['id_penggajian'] ?>" data-id="<?php echo $row['id_penggajian'] ?>"><span class="fa fa-eye text-dark"></span> Detail</a>
-				                  
+				                  <div class="dropdown-menu" role="menu">
+				                    <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=paket/view_paket&id='.$row['idpaket'] ?>" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+				                    <div class="dropdown-divider"></div>
+				                    <a class="dropdown-item edit_data" href="<?php echo base_url.'admin?page=paket/manage_paket&id='.$row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <div class="dropdown-divider"></div>
+				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                  </div>
 							</td>
 						</tr>
 					<?php endwhile; ?>
@@ -90,14 +65,38 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Yakin ingin menghapus data tunjangan karyawan ini?","delete_category",[$(this).attr('data-id')])
+			_conf("Yakin ingin menghapus paket ini?","delete_category",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Tambah data penggajian karyawan","penggajian/manage_penggajian.php","mid-large")
+			uni_modal("<i class='fa fa-plus'></i> Tambah Jasa","paket/manage_paket.php","mid-large")
 		})
 		
+		$('.view_data').click(function(){
+			uni_modal("<i class='fa fa-box'></i> Detail Jasa","paket/view_paket.php?id="+$(this).attr('data-id'),"")
+		})
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 		$('.table').dataTable();
 	})
-	
+	function delete_category($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=delete_paket",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
 </script>

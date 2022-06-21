@@ -1,5 +1,5 @@
 <?php 
-$qry = $conn->query("SELECT `id_penggajian`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total`,`bulan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian = '{$_GET['id']}' AND bulan = MONTH(CURDATE())");
+$qry = $conn->query("SELECT `id_penggajian`,`noslip`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total`,`bulan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian = '{$_GET['id']}' AND bulan = MONTH(CURDATE())");
 
 if($qry->num_rows >0){
     foreach($qry->fetch_array() as $k => $v){
@@ -15,9 +15,17 @@ if($qry->num_rows >0){
     
     <div class="card-body" id="print_out">
         <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="noslip" class="control-label "><?php echo $noslip ?> </label>
+                    </div>                        
+            </div> 
+        </div>                
             <div class="row">
             <div class="col-md-4">
                     <div class="form-group">
+                        
                         <label for="bulan" class="control-label text-info">Bulan </label>
                         
                         <?php if($bulan == 1): ?>
@@ -96,7 +104,7 @@ if($qry->num_rows >0){
                     $totalkotor = 0;
                         
                     if(isset($id_karyawan)):
-                    $qry = $conn->query("SELECT `id_penggajian`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`total`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total`,`bulan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian = '{$_GET['id']}' AND bulan = MONTH(CURDATE())");
+                    $qry = $conn->query("SELECT `id_penggajian`,`noslip`,tunjangan.id_karyawan,`nama`,`jabatan`,`gajipokok`,`t_kesehatan`,`t_makan`,`t_makeup`,`t_transport`,`t_kasir`,`t_kerajinan`,`lembur`,absensi.`id`,tunjangan.`id_tunjangan`,`total`,`uanglembur`,`point`,`bonus`,`p_cashbon`,`p_lain`,`total`,`bulan` FROM karyawan JOIN tunjangan ON karyawan.id = tunjangan.id_karyawan JOIN absensi ON karyawan.id = absensi.id_karyawan JOIN penggajian ON penggajian.`id_karyawan`= karyawan.`id` WHERE id_penggajian = '{$_GET['id']}' AND bulan = MONTH(CURDATE())");
                     while($row = $qry->fetch_assoc()):
                          $totalkotor = $row['gajipokok'] + $row['t_kesehatan'] + $row['t_makan'] + $row['t_makeup'] + $row['t_transport'] + $row['t_kasir'] + $row['t_kerajinan']
                     ?>

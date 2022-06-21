@@ -28,8 +28,9 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		</div>
 
         <div class="form-group col-6">
-					<label for="jabatan">Jabatan</label>
-					<select name="jabatan" id="jabatan" class="custom-select" value="<?php echo isset($meta['jabatan']) ? $meta['jabatan']: '' ?>" required>
+					<label for="jabatanlabel">Jabatan</label>
+					<select  name = "jabatan" id="jabatan" class="custom-select select2">
+					<option selected></option>
 						<option value="1" 
                             <?php echo isset($jabatan) && $jabatan == 1 ? 'selected': '' ?>>Hairstylist</option>
 						<option value="2" 
@@ -55,7 +56,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </div>
 <script>
   
-	
+  $(function(){
+        $('.select2').select2({
+            placeholder:"Pilih Jabatan",
+            width:'resolve',
+        })       
+    })
+
 		$('#karyawan-form').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
