@@ -33,7 +33,7 @@
     ?>
 
         
-            <input type="hidden" name="idpaket" value="<?php echo isset($idpaket) ? $idpaket : '' ?>">
+            <input type="hidden" name="id_transaksi" value="<?php echo isset($id_transaksi) ? $id_transaksi : '' ?>">
             <input type="hidden" name = "nofaktur" id = "nofaktur" class="form-control rounded-0" value="<?php echo $koderef ?>" readonly></input>	
 
             <div class="container-fluid">
@@ -310,7 +310,7 @@
 				},
 				success:function(resp){
 					if(resp.status == 'success'){
-						location.replace(_base_url_+"admin/?page=paket/view_paket&id="+resp.id);
+						location.replace(_base_url_+"admin/?page=transaksi/view_transaksi&id="+resp.id);
 					}else if(resp.status == 'failed' && !!resp.msg){
                         var el = $('<div>')
                             el.addClass("alert alert-danger err-msg").text(resp.msg)

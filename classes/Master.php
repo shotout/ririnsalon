@@ -549,30 +549,13 @@ Class Master extends DBConnection {
 	}
 
 
-	function delete_gaji(){
-		extract($_POST);
-		$sql = "DELETE FROM `paket_item` where idpaket = '{$id}'";
-		$delete_item = $this->conn->query($sql);
-
-		if($delete_item){
-			$resp['status'] = 'success';
-			$sql1 = "DELETE FROM `paket` where idpaket = '{$id}'";
-			$delete = $this->conn->query($sql1);
-			$this->settings->set_flashdata('success',"Data berhasil dihapus.");
-		}else{
-			$resp['status'] = 'failed';
-			$resp['error'] = $this->conn->error;
-		}
-		return json_encode($resp);
-	}
-
-
+	
 
 	function save_transaksi(){
 		extract($_POST);
 		
-		$id_item = $_POST['id_jasa'];
-		$id = $_POST['idpaket'];	
+		$id_item = $_POST['idjasa'];
+		$id = $_POST['id_transaksi'];	
 		$flag = $_POST['flagjasa'];
 			 
 		
@@ -600,19 +583,19 @@ Class Master extends DBConnection {
 			$data = "";
 			foreach($id_item as $k =>$v){
 				if(!empty($data)) $data .=", ";
-				$data .= "('{$id_item}','{$jumlah[$k]}','{$total[$k]}','{$flag[$k]}')";
+				$data .= "('{$id_transaksi}','{$idjasa[$k]}','{$jumlah[$k]}','{$total[$k]}','{$flag[$k]}')";
 				
 			}
 			if(!empty($data)){
 				$this->conn->query("DELETE FROM `detail_transaksi` where id_transaksi = '{$id_transaksi}'");
-				$save = $this->conn->query("INSERT INTO `detail_transaksi` (`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}");
+				$save = $this->conn->query("INSERT INTO `detail_transaksi` (`id_transaksi`,`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}");
 				if(!$save){
 					$resp['status'] = 'failed';
 					if(empty($id)){
 						$this->conn->query("DELETE FROM `transaksi` where id_transaksi '{$id_transaksi}'");
 					}
 					$resp['msg'] = 'Gagal menyimpan. Error: '.$this->conn->error;
-					$resp['sql'] = "INSERT INTO `detail_transaksi` (`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}";
+					$resp['sql'] = "INSERT INTO `detail_transaksi` (`id_transaksi`,`id_item`,`jumlah`,`subtotal`,`ket`) VALUES {$data}";
 				}
 			}
 		}else{

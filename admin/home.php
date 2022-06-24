@@ -106,6 +106,24 @@
         <!-- /.info-box -->
     </div>
 
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box bg-light shadow">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-dollar-sign"></i></span>
+
+            <div class="info-box-content">
+            <span class="info-box-text">Transaksi</span>
+            <span class="info-box-number text-right">
+            <?php 
+                    echo $conn->query("SELECT * FROM `transaksi`")->num_rows;
+                ?>
+            </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+
     <?php if($_settings->userdata('type') == 1): ?>
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box bg-light shadow">

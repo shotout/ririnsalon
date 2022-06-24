@@ -1,5 +1,5 @@
 <?php 
-$qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$_GET['id']}'");
+$qry = $conn->query("SELECT * FROM transaksi join detail_transaksi on transaksi.id_transaksi=detail_transaksi.id_transaksi WHERE transaksi.id_transaksi = '{$_GET['id']}'");
 if($qry->num_rows >0){
     foreach($qry->fetch_array() as $k => $v){
         $$k = $v;
@@ -8,20 +8,32 @@ if($qry->num_rows >0){
 ?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h4 class="card-title">Detail Paket - <?php echo $namapaket ?></h4>
+        <h4 class="card-title">Detail Transaksi</h4>
     </div>
     <div class="card-body" id="print_out">
         <div class="container-fluid">
+        <div class="row">                
+                <div class="col-md-6">
+                <div class="form-group">
+                        <label for="nofaktur" class="control-label text-info">Faktur</label>
+                        <div><?php echo isset($nofaktur) ? $nofaktur : '' ?></div>
+                    </div>   
+                </div>
+            </div>
             <div class="row">                
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="supplier_id" class="control-label text-info">Nama Paket</label>
-                        <div><?php echo isset($namapaket) ? $namapaket : '' ?></div>
+                        <label for="namapelanggan" class="control-label text-info">Pelanggan</label>
+                        <div><?php echo isset($namapelanggan) ? $namapelanggan : '' ?></div>
                     </div>
                 </div>
+                <div class="form-group">
+                        <label for="nohp_pelanggan" class="control-label text-info">No. Telepehone</label>
+                        <div><?php echo isset($nohp_pelanggan) ? $nohp_pelanggan : '' ?></div>
+                    </div>
             </div>
 </br>
-            <h4 class="text-info">List Jasa</h4>
+            <h4 class="text-info">List Item</h4>
             <table class="table table-striped table-bordered" id="list">
                 <colgroup>                                          
                     <col width="35%">
@@ -40,12 +52,12 @@ if($qry->num_rows >0){
                 </thead>
                 <tbody>
                     <?php 
-                    $total = 0;
+                    // $total = 0;
                         
-                    if(isset($idpaket)):
-                    $qry = $conn->query("SELECT paket.idpaket,namapaket,jasa.idjasa,namajasa,hargajasa,jumlah,subtotal,hargapaket,diskon,disk_perc,keteranganpaket FROM paket JOIN paket_item ON paket.idpaket=paket_item.idpaket JOIN jasa ON paket_item.idjasa = jasa.idjasa WHERE paket.idpaket = '{$idpaket}'");
+                    if(isset($id_transaksi)):
+                    $qry = $conn->query("SELECT * FROM (SELECT id_transaksi,idjasa,namajasa,hargajasa,jumlah,subtotal FROM jasa JOIN detail_transaksi ON id_item=idjasa UNION SELECT id_transaksi,idpaket,namapaket,hargapaket,jumlah,subtotal FROM paket JOIN detail_transaksi ON id_item=idpaket) AS item WHERE id_transaksi = '{$id_transaksi}'");
                     while($row = $qry->fetch_assoc()):
-                        $total = $row['hargapaket'] + $row['diskon']
+                        //  $total = $row['hargajasa'] + $row['diskon']
                     ?>
                     <tr>
                        
@@ -82,30 +94,26 @@ if($qry->num_rows >0){
                         <th class="text-right py-1 px-2 sub-total"><?php echo number_format($total,0)  ?></th>
                     </tr>
                     <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Discount <?php echo isset($disk_perc) ? $disk_perc : 0 ?>%</th>
+                        <th class="text-right py-1 px-2" colspan="4">Discount</th>
                         <th class="text-right py-1 px-2 diskon"><?php echo isset($diskon) ? number_format($diskon,0) : 0 ?></th>
-                    </tr>                    
+                    </tr>
                     <tr>
-                        <th class="text-right py-1 px-2" colspan="4">Harga Paket</th>
-                        <th class="text-right py-1 px-2 grand-total"><?php echo isset($hargapaket) ? number_format($hargapaket,0) : 0 ?></th>
+                        <th class="text-right py-1 px-2" colspan="4">Pajak</th>
+                        <th class="text-right py-1 px-2 pajak"><?php echo isset($pajak) ? number_format($pajak,0) : 0 ?></th>
+                    </tr>                     
+                    <tr>
+                        <th class="text-right py-1 px-2" colspan="4">Grand Total</th>
+                        <th class="text-right py-1 px-2 grand-total"><?php echo isset($total) ? number_format($total,0) : 0 ?></th>
                     </tr>
                 </tfoot>
             </table>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="remarks" class="text-info control-label">Keterangan</label>
-                        <p><?php echo isset($keteranganpaket) ? $keteranganpaket : '' ?></p>
-                    </div>
-                </div>
-               
-            </div>
+            
         </div>
     </div>
     <div class="card-footer py-1 text-center">
         <button class="btn btn-flat btn-success" type="button" id="print">Print</button>
-        <a class="btn btn-flat btn-primary" href="<?php echo base_url.'/admin?page=paket/manage_paket&id='.(isset($idpaket) ? $idpaket : '') ?>">Edit</a>
-        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=paket/paket' ?>">Kembali</a>
+        
+        <a class="btn btn-flat btn-dark" href="<?php echo base_url.'/admin?page=transaksi/transaksi' ?>">Kembali</a>
     </div>
 </div>
 <table id="clone_list" class="d-none">
@@ -137,7 +145,7 @@ if($qry->num_rows >0){
             start_loader()
             var _el = $('<div>')
             var _head = $('head').clone()
-                _head.find('title').text("Detail Paket - Print View")
+                _head.find('title').text("Transaksi - Print View")
             var p = $('#print_out').clone()
             p.find('tr.text-light').removeClass("text-light bg-navy")
             _el.append(_head)
@@ -147,7 +155,7 @@ if($qry->num_rows >0){
                       '</div>'+
                       '<div class="col-10">'+
                       '<h4 class="text-center"><?php echo $_settings->info('name') ?></h4>'+
-                      '<h4 class="text-center">Detail Paket</h4>'+
+                      '<h4 class="text-center">Faktur Transaksi</h4>'+
                       '</div>'+
                       '<div class="col-1 text-right">'+
                       '</div>'+

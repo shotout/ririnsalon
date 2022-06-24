@@ -29,14 +29,14 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT nofaktur,tanggal,total from transaksi order by nofaktur asc ");
+						$qry = $conn->query("SELECT * from transaksi order by nofaktur asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 						<tr>
 							<!-- <td class="text-center"><?php echo $i++; ?></td> -->
                             <td><?php echo $row['nofaktur'] ?></td>	
                             <td><?php echo date("d M Y",strtotime($row['tanggal'])) ?></td>                           
-                            <td><?php echo $row['total'] ? "Rp " . number_format($row['hargapaket'],0) : '' ?></td>	
+                            <td><?php echo $row['total'] ? "Rp " . number_format($row['total'],0) : '' ?></td>	
                             
 													
 							
@@ -47,11 +47,8 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-				                    <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=paket/view_paket&id='.$row['idpaket'] ?>" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item edit_data" href="<?php echo base_url.'admin?page=paket/manage_paket&id='.$row['idpaket'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['idpaket'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item view_data" href="<?php echo base_url.'admin?page=transaksi/view_transaksi&id='.$row['id_transaksi'] ?>" data-id="<?php echo $row['id_transaksi'] ?>"><span class="fa fa-eye text-dark"></span> View</a>
+				                    
 				                  </div>
 							</td>
 						</tr>
